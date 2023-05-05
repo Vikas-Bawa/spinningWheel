@@ -12,34 +12,33 @@ function Wheel() {
         picked = 100000,
         oldpick = [],
         color = d3.scale.category20();//category20c()
-    //randomNumbers = getRandomNumbers();
-    //http://osric.com/bingo-card-generator/?title=HTML+and+CSS+BINGO!&words=padding%2Cfont-family%2Ccolor%2Cfont-weight%2Cfont-size%2Cbackground-color%2Cnesting%2Cbottom%2Csans-serif%2Cperiod%2Cpound+sign%2C%EF%B9%A4body%EF%B9%A5%2C%EF%B9%A4ul%EF%B9%A5%2C%EF%B9%A4h1%EF%B9%A5%2Cmargin%2C%3C++%3E%2C{+}%2C%EF%B9%A4p%EF%B9%A5%2C%EF%B9%A4!DOCTYPE+html%EF%B9%A5%2C%EF%B9%A4head%EF%B9%A5%2Ccolon%2C%EF%B9%A4style%EF%B9%A5%2C.html%2CHTML%2CCSS%2CJavaScript%2Cborder&freespace=true&freespaceValue=Web+Design+Master&freespaceRandom=false&width=5&height=5&number=35#results
     var data = [
         { "label": "Dell LAPTOP", "value": 1 }, // padding
         { "label": "IMAC PRO", "value": 2 }, //font-family
         { "label": "SUZUKI", "value": 3 }, //color
         { "label": "HONDA", "value": 4 }, //font-weight
-        // { "label": "FERRARI", "value": 5 }, //font-size
-        // { "label": "APARTMENT", "value": 6 }, //background-color
-        // { "label": "IPAD PRO", "value": 7 }, //nesting
-        // { "label": "LAND", "value": 8 }, //bottom
-        // { "label": "MOTOROLLA", "value": 9 }, //sans-serif
-        // { "label": "BMW", "value": 10 },
-        // { "label": "LAMBORGHINI", "value": 11 },
-        // { "label": "MCU", "value": 12 },
-        // { "label": "ROVER", "value": 13 },
-        // { "label": "CRUISER", "value": 14 },
-        // { "label": "TRACTOR", "value": 15 },
-        // { "label": "JEEP", "value": 16 },
-        // { "label": "BULLET", "value": 17 },
-        // { "label": "YAMAHA", "value": 18 },
-        // { "label": "HERO", "value": 19 },
-        // { "label": "RENAULT", "value": 20 },
-        // { "label": "FORD", "value": 21 },
-        // { "label": "JAGUAR", "value": 22 }
+        { "label": "FERRARI", "value": 5 }, //font-size
+        { "label": "APARTMENT", "value": 6 }, //background-color
+        { "label": "IPAD PRO", "value": 7 }, //nesting
+        { "label": "LAND", "value": 8 }, //bottom
+        { "label": "MOTOROLLA", "value": 9 }, //sans-serif
+        { "label": "BMW", "value": 10 },
+        { "label": "LAMBORGHINI", "value": 11 },
+        { "label": "MCU", "value": 12 },
+        { "label": "ROVER", "value": 13 },
+        { "label": "CRUISER", "value": 14 },
+        { "label": "TRACTOR", "value": 15 },
+        { "label": "JEEP", "value": 16 },
+        { "label": "BULLET", "value": 17 },
+        { "label": "YAMAHA", "value": 18 },
+        { "label": "HERO", "value": 19 },
+        { "label": "RENAULT", "value": 20 },
+        { "label": "FORD", "value": 21 },
+        { "label": "JAGUAR", "value": 22 }
     ];
     var container;
     var vis;
+    var innerCircle;
 
 
 
@@ -76,20 +75,17 @@ function Wheel() {
             .attr('xlink:href', uncommon_1)
             .attr("width", 100)
             .attr("height", 100)
-            .attr("x", 30)
-            .attr("y", 30);
+            .attr("x", 0)
+            .attr("y", 0);
         arcs.append("path")
             .attr("fill", function (d, i) { return color(i); })
             // adding the image
             // .attr("fill", "url(#wedgeImg1)")
-            // .attr("fill", function (d, i) {
-            //     return "url(#wedgeImg" + (i + 1) + ")";
-            // })
-            // .attr("transform", function (d) {
-            //     d.angle = (d.startAngle + d.endAngle) / 2;
-            //     return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")";
-            // })
-            .attr("d", function (d) { return arc(d); });
+            .attr("fill", function (d, i) {
+                return "url(#wedgeImg" + (i + 1) + ")";
+            })
+            .attr("transform", '(-45)')
+            .attr("d", function (d) { console.log(d); return arc(d); });
         // add the text
         var p = arcs.append("p")
         p.append("path")
@@ -139,7 +135,6 @@ function Wheel() {
         // .text(function (d, i) {
         //     return data[i].label;
         // });
-        container.on("click", spin);
 
         //make arrow
         svg.append("g")
@@ -148,12 +143,13 @@ function Wheel() {
             .attr("d", "M-" + (r * .15) + ",0L0," + (r * .05) + "L0,-" + (r * .05) + "Z")
             .style({ "fill": "black" });
         //draw spin cir
-        container.append("circle")
-            .attr("cx", 0)
+        innerCircle = container.append("circle")
+        innerCircle.attr("cx", 0)
             .attr("cy", 0)
             .attr("r", 60)
             .style({ "fill": "white", "cursor": "pointer" });
         //spin text
+        innerCircle.on("click", spin);
         container.append("text")
             .attr("x", 0)
             .attr("y", 12)
@@ -164,12 +160,12 @@ function Wheel() {
 
     const spin = (d) => {
 
-        container.on("click", null);
+        innerCircle.on("click", null);
         //all slices have been seen, all done
         console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
         if (oldpick.length == data.length) {
             console.log("done");
-            container.on("click", null);
+            innerCircle.on("click", null);
             return;
         }
         var ps = 360 / data.length,
@@ -203,7 +199,7 @@ function Wheel() {
                 console.log(data[picked].value)
 
                 /* Comment the below line for restrict spin to sngle time */
-                container.on("click", spin);
+                innerCircle.on("click", spin);
             });
     }
 
@@ -212,22 +208,6 @@ function Wheel() {
         return function (t) {
             return "rotate(" + i(t) + ")";
         };
-    }
-
-
-    function getRandomNumbers() {
-        var array = new Uint16Array(1000);
-        var scale = d3.scale.linear().range([360, 1440]).domain([0, 100000]);
-        if (window.hasOwnProperty("crypto") && typeof window.crypto.getRandomValues === "function") {
-            window.crypto.getRandomValues(array);
-            console.log("works");
-        } else {
-            //no support for crypto, get crappy random numbers
-            for (var i = 0; i < 1000; i++) {
-                array[i] = Math.floor(Math.random() * 100000) + 1;
-            }
-        }
-        return array;
     }
 
     return (
