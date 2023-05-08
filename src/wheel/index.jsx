@@ -1,5 +1,7 @@
 import React, { useEffect, useRef } from 'react';
-import uncommon_1 from '../assets/wedges/mountain.jpeg';
+import applause from "../assets/applause.mp3";
+import uncommon_1 from '../assets/wedges/uncommon_1.png';
+import wheel from "../assets/wheel.mp3";
 import './style.css';
 function Wheel() {
     const onMountRef = useRef(true);
@@ -40,6 +42,17 @@ function Wheel() {
     var vis;
     var innerCircle;
 
+    // let audio = new Audio("../assets/wheel.mp3");
+
+    const startAudio = () => {
+        console.log('playing sound')
+        new Audio(wheel).play();
+        setTimeout(() => {
+            console.log('winner....')
+            new Audio(applause).play();
+        }, 6000);
+    }
+
 
     // M-80,-190A210,210 0 0,1 80.492424,-194.492424L0,0Z
     useEffect(() => {
@@ -69,14 +82,23 @@ function Wheel() {
                 return "wedgeImg" + (i + 1);
             })
             .attr('patternUnits', 'objectBoundingBox')
-            .attr('width', '6')
-            .attr('height', '6')
+            .attr('width', '100%')
+            .attr('height', '100%')
             .append('svg:image')
             .attr('xlink:href', uncommon_1)
-            .attr("width", 100)
-            .attr("height", 100)
+            .attr("width", 60)
+            .attr("height", 205)
             .attr("x", 0)
-            .attr("y", 0);
+            .attr("y", 0)
+            .attr("transform", function (d) {
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle) / 2;
+                // return "rotate(" + (d.angle * 180 / Math.PI) + ")";
+                return "rotate(" + (d.startAngle * 180 / Math.PI) + (d.angle * 180 / Math.PI) + ")translate(" + (-30) + ', ' + (-d.outerRadius) + ")";
+            })
+
+            .attr("transform-origin", "top left");
         var path = arcs.append("path")
         path.attr("fill", function (d, i) { return color(i); })
             // adding the image
@@ -92,30 +114,12 @@ function Wheel() {
                     .attr("transform", function (d) {
                         return "scale(1.1)";
                     })
-                // d3.select(this.parentNode).select("text").transition()
-                //     .duration('500')
-                //     .style("font-weight", "bold")
-                //     .attr("transform", function (d) {
-                //         d.innerRadius = 0;
-                //         d.outerRadius = r;
-                //         d.angle = (d.startAngle + d.endAngle) / 2;
-                //         return "rotate(" + (d.angle * 180 / Math.PI) + ")translate(" + (0) + ', ' + (-(d.outerRadius - 30)) + ")";
-                //     })
             }).on("mouseout", function (d) {
                 d3.select(this.parentNode).transition()
                     .duration('500')
                     .attr("transform", function (d) {
                         return "scale(1)";
                     })
-                // d3.select(this.parentNode).select("text").transition()
-                //     .duration('500')
-                //     .style("font-weight", "normal")
-                //     .attr("transform", function (d) {
-                //         d.innerRadius = 0;
-                //         d.outerRadius = r;
-                //         d.angle = (d.startAngle + d.endAngle) / 2;
-                //         return "rotate(" + (d.angle * 180 / Math.PI) + ")translate(" + (0) + ', ' + (-(d.outerRadius - 30)) + ")";
-                //     })
             })
         // add the text
         var p = arcs.append("p")
@@ -130,6 +134,7 @@ function Wheel() {
                 d.innerRadius = 0;
                 d.outerRadius = r;
                 d.angle = (d.startAngle + d.endAngle) / 2;
+                console.log('d.startAngle: ' + d.startAngle + 'd.endAngle: ' + d.endAngle + 'dangle : ', (d.angle * 180 / Math.PI));
                 return "rotate(" + (d.angle * 180 / Math.PI) + ")translate(" + (0) + ', ' + (-(d.outerRadius - 30)) + ")";
                 // return 'rotate(-45) translate (100)';
             })
@@ -192,7 +197,7 @@ function Wheel() {
     }, [])
 
     const spin = (d) => {
-
+        startAudio();
         innerCircle.on("click", null);
         //all slices have been seen, all done
         console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
@@ -225,7 +230,7 @@ function Wheel() {
             .each("end", function () {
                 //mark question as seen
                 d3.select(".slice:nth-child(" + (picked + 1) + ") path")
-                    .attr("fill", "grey");
+                // .attr("fill", "grey");
                 oldrotation = rotation;
 
                 /* Get the result value from object "data" */
