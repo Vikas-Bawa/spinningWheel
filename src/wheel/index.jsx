@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import uncommon_1 from '../assets/wedges/uncommon_1.png';
+import uncommon_1 from '../assets/wedges/mountain.jpeg';
 import './style.css';
 function Wheel() {
     const onMountRef = useRef(true);
@@ -20,12 +20,12 @@ function Wheel() {
         { "label": "FERRARI", "value": 5 }, //font-size
         { "label": "APARTMENT", "value": 6 }, //background-color
         { "label": "IPAD PRO", "value": 7 }, //nesting
-        { "label": "LAND", "value": 8 }, //bottom
+        { "label": "LAND ROVER", "value": 8 }, //bottom
         { "label": "MOTOROLLA", "value": 9 }, //sans-serif
         { "label": "BMW", "value": 10 },
         { "label": "LAMBORGHINI", "value": 11 },
         { "label": "MCU", "value": 12 },
-        { "label": "ROVER", "value": 13 },
+        { "label": "HOVER", "value": 13 },
         { "label": "CRUISER", "value": 14 },
         { "label": "TRACTOR", "value": 15 },
         { "label": "JEEP", "value": 16 },
@@ -41,7 +41,7 @@ function Wheel() {
     var innerCircle;
 
 
-
+    // M-80,-190A210,210 0 0,1 80.492424,-194.492424L0,0Z
     useEffect(() => {
         if (!onMountRef.current) return;
         onMountRef.current = false;
@@ -77,15 +77,46 @@ function Wheel() {
             .attr("height", 100)
             .attr("x", 0)
             .attr("y", 0);
-        arcs.append("path")
-            .attr("fill", function (d, i) { return color(i); })
+        var path = arcs.append("path")
+        path.attr("fill", function (d, i) { return color(i); })
             // adding the image
             // .attr("fill", "url(#wedgeImg1)")
-            .attr("fill", function (d, i) {
-                return "url(#wedgeImg" + (i + 1) + ")";
-            })
+            // .attr("fill", function (d, i) {
+            //     return "url(#wedgeImg" + (i + 1) + ")";
+            // })
             .attr("transform", '(-45)')
-            .attr("d", function (d) { console.log(d); return arc(d); });
+            .attr("d", function (d) { console.log(arc(d)); return arc(d); })
+            .on("mouseover", function (d) {
+                d3.select(this.parentNode).transition()
+                    .duration('500')
+                    .attr("transform", function (d) {
+                        return "scale(1.1)";
+                    })
+                // d3.select(this.parentNode).select("text").transition()
+                //     .duration('500')
+                //     .style("font-weight", "bold")
+                //     .attr("transform", function (d) {
+                //         d.innerRadius = 0;
+                //         d.outerRadius = r;
+                //         d.angle = (d.startAngle + d.endAngle) / 2;
+                //         return "rotate(" + (d.angle * 180 / Math.PI) + ")translate(" + (0) + ', ' + (-(d.outerRadius - 30)) + ")";
+                //     })
+            }).on("mouseout", function (d) {
+                d3.select(this.parentNode).transition()
+                    .duration('500')
+                    .attr("transform", function (d) {
+                        return "scale(1)";
+                    })
+                // d3.select(this.parentNode).select("text").transition()
+                //     .duration('500')
+                //     .style("font-weight", "normal")
+                //     .attr("transform", function (d) {
+                //         d.innerRadius = 0;
+                //         d.outerRadius = r;
+                //         d.angle = (d.startAngle + d.endAngle) / 2;
+                //         return "rotate(" + (d.angle * 180 / Math.PI) + ")translate(" + (0) + ', ' + (-(d.outerRadius - 30)) + ")";
+                //     })
+            })
         // add the text
         var p = arcs.append("p")
         p.append("path")
@@ -99,13 +130,15 @@ function Wheel() {
                 d.innerRadius = 0;
                 d.outerRadius = r;
                 d.angle = (d.startAngle + d.endAngle) / 2;
-                return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 10) + ")";
+                return "rotate(" + (d.angle * 180 / Math.PI) + ")translate(" + (0) + ', ' + (-(d.outerRadius - 30)) + ")";
                 // return 'rotate(-45) translate (100)';
             })
-            .attr("text-anchor", "end")
+            .attr("text-anchor", "middle")
             .text(function (d, i) {
                 return data[i].label;
-            });
+            })
+            .style("font-size", "0.5em")
+
         // p.append("text")
         //     .append("textPath") //append a textPath to the text element
         //     .attr("xlink:href", "#curve") //place the ID of the path here
