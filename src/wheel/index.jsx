@@ -1,6 +1,7 @@
 import React, { useEffect, useRef } from 'react';
+import { data } from '../Constants';
 import applause from "../assets/applause.mp3";
-import uncommon_1 from '../assets/wedges/uncommon_1.png';
+// import uncommon_1 from '../assets/wedges/fortune1.png';
 import wheel from "../assets/wheel.mp3";
 import './style.css';
 function Wheel() {
@@ -14,35 +15,10 @@ function Wheel() {
         picked = 100000,
         oldpick = [],
         color = d3.scale.category20();//category20c()
-    var data = [
-        { "label": "Dell LAPTOP", "value": 1 }, // padding
-        { "label": "IMAC PRO", "value": 2 }, //font-family
-        { "label": "SUZUKI", "value": 3 }, //color
-        { "label": "HONDA", "value": 4 }, //font-weight
-        { "label": "FERRARI", "value": 5 }, //font-size
-        { "label": "APARTMENT", "value": 6 }, //background-color
-        { "label": "IPAD PRO", "value": 7 }, //nesting
-        { "label": "LAND ROVER", "value": 8 }, //bottom
-        { "label": "MOTOROLLA", "value": 9 }, //sans-serif
-        { "label": "BMW", "value": 10 },
-        { "label": "LAMBORGHINI", "value": 11 },
-        { "label": "MCU", "value": 12 },
-        { "label": "HOVER", "value": 13 },
-        { "label": "CRUISER", "value": 14 },
-        { "label": "TRACTOR", "value": 15 },
-        { "label": "JEEP", "value": 16 },
-        { "label": "BULLET", "value": 17 },
-        { "label": "YAMAHA", "value": 18 },
-        { "label": "HERO", "value": 19 },
-        { "label": "RENAULT", "value": 20 },
-        { "label": "FORD", "value": 21 },
-        { "label": "JAGUAR", "value": 22 }
-    ];
+
     var container;
     var vis;
     var innerCircle;
-
-    // let audio = new Audio("../assets/wheel.mp3");
 
     const startAudio = () => {
         console.log('playing sound')
@@ -53,8 +29,6 @@ function Wheel() {
         }, 6000);
     }
 
-
-    // M-80,-190A210,210 0 0,1 80.492424,-194.492424L0,0Z
     useEffect(() => {
         if (!onMountRef.current) return;
         onMountRef.current = false;
@@ -70,45 +44,57 @@ function Wheel() {
 
         var pie = d3.layout.pie().sort(null).value(function (d) { return 1; });
         // declare an arc generator function
-        var arc = d3.svg.arc().outerRadius(r);
-        // select paths, use arc generator to draw
+        var arc = d3.svg.arc()
+            .outerRadius(r)
+            .innerRadius(0);
         var arcs = vis.selectAll("g.slice")
             .data(pie)
             .enter()
             .append("g")
             .attr("class", "slice");
-        arcs.append("pattern")
-            .attr('id', function (d, i) {
-                return "wedgeImg" + (i + 1);
+
+        arcs.append('svg:image')
+            .attr('xlink:href', function (d, i) {
+                return data[i].image;
             })
-            .attr('patternUnits', 'objectBoundingBox')
-            .attr('width', '100%')
-            .attr('height', '100%')
-            .append('svg:image')
-            .attr('xlink:href', uncommon_1)
             .attr("width", 60)
             .attr("height", 205)
             .attr("x", 0)
             .attr("y", 0)
             .attr("transform", function (d) {
+                var centroid = arc.centroid(d);
+                console.log('d...', d)
+                console.log('centroid...', centroid)
                 d.innerRadius = 0;
                 d.outerRadius = r;
                 d.angle = (d.startAngle + d.endAngle) / 2;
                 // return "rotate(" + (d.angle * 180 / Math.PI) + ")";
-                return "rotate(" + (d.startAngle * 180 / Math.PI) + (d.angle * 180 / Math.PI) + ")translate(" + (-30) + ', ' + (-d.outerRadius) + ")";
+                return "rotate(" + ((d.angle * 180) / Math.PI) + ")translate(" + (-30) + ', ' + (-d.outerRadius) + ")";
+                // return "rotate(" + ((d.startAngle * 180 / Math.PI) + (d.angle * 180 / Math.PI)) + ")translate(" + (0) + ', ' + (-d.outerRadius) + ")";
             })
-
-            .attr("transform-origin", "top left");
-        var path = arcs.append("path")
-        path.attr("fill", function (d, i) { return color(i); })
-            // adding the image
-            // .attr("fill", "url(#wedgeImg1)")
-            // .attr("fill", function (d, i) {
-            //     return "url(#wedgeImg" + (i + 1) + ")";
-            // })
-            .attr("transform", '(-45)')
+            .attr("transform-origin", "top left")
+            .on("mouseover", function (d) {
+                console.log(d3.select(this.parentNode), 'this is parent node')
+                d3.select(this.parentNode).transition()
+                    .duration('500')
+                    .attr("transform", function (d) {
+                        return "scale(1.1)";
+                    })
+            }).on("mouseout", function (d) {
+                d3.select(this.parentNode).transition()
+                    .duration('500')
+                    .attr("transform", function (d) {
+                        return "scale(1)";
+                    })
+            });
+        arcs.append("path")
+            .attr("fill", function (d, i) { return color(i); })
+            .attr("fill", function (d, i) {
+                return "url(#wedgeImg" + (i + 1) + ")";
+            })
             .attr("d", function (d) { console.log(arc(d)); return arc(d); })
             .on("mouseover", function (d) {
+                console.log(d3.select(this.parentNode), 'this is parent node')
                 d3.select(this.parentNode).transition()
                     .duration('500')
                     .attr("transform", function (d) {
@@ -121,13 +107,7 @@ function Wheel() {
                         return "scale(1)";
                     })
             })
-        // add the text
-        var p = arcs.append("p")
-        p.append("path")
-            .attr("id", "curve") //Unique id of the path
-        //     .attr("d", "M 0,300 A 200,200 0 0,1 400,300") //SVG path
-        //     .style("fill", "none")
-        //     .style("stroke", "#AAAAAA");
+
 
         arcs.append("text")
             .attr("transform", function (d) {
@@ -136,7 +116,6 @@ function Wheel() {
                 d.angle = (d.startAngle + d.endAngle) / 2;
                 console.log('d.startAngle: ' + d.startAngle + 'd.endAngle: ' + d.endAngle + 'dangle : ', (d.angle * 180 / Math.PI));
                 return "rotate(" + (d.angle * 180 / Math.PI) + ")translate(" + (0) + ', ' + (-(d.outerRadius - 30)) + ")";
-                // return 'rotate(-45) translate (100)';
             })
             .attr("text-anchor", "middle")
             .text(function (d, i) {
@@ -144,35 +123,6 @@ function Wheel() {
             })
             .style("font-size", "0.5em")
 
-        // p.append("text")
-        //     .append("textPath") //append a textPath to the text element
-        //     .attr("xlink:href", "#curve") //place the ID of the path here
-        // .style("text-anchor", "middle") //place the text halfway on the arc
-        // .attr("startOffset", "50%")
-        // .text("Yay, my text is on a curve path")
-        // arcs.append("text").attr("transform", function (d) {
-        //     d.innerRadius = 0;
-        //     d.outerRadius = r;
-        //     d.angle = (d.startAngle + d.endAngle) / 2;
-        //     return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 10) + ")";
-        //     // return 'rotate(-45) translate (100)';
-        // })
-        // .attr("text-anchor", "end")
-        // .text(function (d, i) {
-        //     return data[i].label;
-        // });
-
-        // arcs.append("text").attr("transform", function (d) {
-        //     d.innerRadius = 0;
-        //     d.outerRadius = r;
-        //     d.angle = (d.startAngle + d.endAngle) / 2;
-        //     return "rotate(" + (d.angle * 180 / Math.PI - 90) + ")translate(" + (d.outerRadius - 10) + ")";
-        //     // return 'rotate(-45) translate (100)';
-        // })
-        // .attr("text-anchor", "end")
-        // .text(function (d, i) {
-        //     return data[i].label;
-        // });
 
         //make arrow
         svg.append("g")
