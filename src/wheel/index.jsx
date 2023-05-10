@@ -1,6 +1,5 @@
 import React, { useEffect, useRef } from "react";
 import { data } from "../Constants";
-import NFT from "../assets/NFTs/SMB Mythic 28 .png";
 import applause from "../assets/applause.mp3";
 import centrePanel from "../assets/centrePanel.png";
 import frame from "../assets/frame.png";
@@ -13,9 +12,9 @@ import wheel from "../assets/wheel.mp3";
 import "./style.css";
 function Wheel() {
   const onMountRef = useRef(true);
-  var padding = { top: 20, right: 40, bottom: 20, left: 40 },
-    w = 500 - padding.left - padding.right,
-    h = 500 - padding.top - padding.bottom,
+  var padding = { top: 10, right: 50, bottom: 10, left: 50 },
+    w = 520 - padding.left - padding.right,
+    h = 520 - padding.top - padding.bottom,
     r = Math.min(w, h) / 2,
     rotation = 0,
     oldrotation = 0,
@@ -48,8 +47,8 @@ function Wheel() {
     svg
       .append("svg:image")
       .attr("xlink:href", frame)
-      .attr("width", "497")
-      .attr("height", "499")
+      .attr("width", "515")
+      .attr("height", "515")
       .attr("x", 0)
       .attr("y", 0);
 
@@ -58,9 +57,21 @@ function Wheel() {
       .attr("class", "chartholder")
       .attr(
         "transform",
-        "translate(" + (w / 2 + padding.left - 1) + "," + (h / 2 + padding.top + 13) + ")"
+        "translate(" + (w / 2 + padding.left - 2) + "," + (h / 2 + padding.top + 12) + ")"
       );
     vis = container.append("g");
+    // var defs = svg.append("defs");
+    // const getGradient = (color) => {};
+    const createGradient = (select) => {
+      console.log("select", select);
+      return svg
+        .append("radialGradient")
+        .attr("id", "svgGradient")
+        .attr("x1", "0%")
+        .attr("x2", "0%")
+        .attr("y1", "0%")
+        .attr("y2", "0%");
+    };
 
     var pie = d3.layout
       .pie()
@@ -75,31 +86,30 @@ function Wheel() {
     arcs
       .append("path")
       .attr("fill", function (d, i) {
-        return color(i);
+        // let );
+        let gardient = createGradient();
+        gardient
+          .append("stop")
+          .attr("class", "start")
+          .attr("offset", "0%")
+          .attr("stop-color", "black")
+          .attr("stop-opacity", 1);
+        gardient
+          .append("stop")
+          .attr("class", "end")
+          .attr("offset", "100%")
+          .attr("stop-color", function (i) {
+            return color(i);
+          })
+          .attr("stop-opacity", 1);
+        console.log(color(i));
+        // return color(i);
       })
-      // .attr("fill", function (d, i) {
-      //     return "url(#wedgeImg" + (i + 1) + ")";
-      // })
       .attr("d", function (d) {
-        console.log(arc(d));
         return arc(d);
-      });
-    //   .on("mouseover", function (d) {
-    //     d3.select(this.parentNode)
-    //       .transition()
-    //       .duration("500")
-    //       .attr("transform", function (d) {
-    //         return "scale(1.1)";
-    //       });
-    //   })
-    //   .on("mouseout", function (d) {
-    //     d3.select(this.parentNode)
-    //       .transition()
-    //       .duration("500")
-    //       .attr("transform", function (d) {
-    //         return "scale(1)";
-    //       });
-    //   });
+      })
+      .attr("fill", "url(#svgGradient)")
+      .call(createGradient);
 
     var arc2 = d3.svg.arc().outerRadius(r).innerRadius(170);
     // var arcs2 = vis.selectAll("g.slice")
@@ -111,37 +121,30 @@ function Wheel() {
       .append("path")
       .attr("fill", "rgba(0,0,0,0.1)")
       .attr("d", function (d) {
-        console.log(arc2(d));
         return arc2(d);
-      })
+      });
 
-      .attr("stroke", "black")
+    var arc3 = d3.svg.arc().outerRadius(170).innerRadius(170);
+    arcs
+      .append("path")
+      .attr("fill", "rgba(0,0,0,1)")
+      .attr("d", function (d) {
+        return arc3(d);
+      })
+      .attr("stroke", "rgba(0,0,0,0.3)")
       .attr("stroke-width", "0.5")
-      //   .on("mouseover", function (d) {
-      //     d3.select(this.parentNode)
-      //       .transition()
-      //       .duration("500")
-      //       .attr("transform", function (d) {
-      //         return "scale(1.1)";
-      //       });
-      //   })
-      //   .on("mouseout", function (d) {
-      //     d3.select(this.parentNode)
-      //       .transition()
-      //       .duration("500")
-      //       .attr("transform", function (d) {
-      //         return "scale(1)";
-      //       });
-      //   })
       .attr("stroke-dasharray", "2 2");
+
+    // .attr('stroke', 'grey')
+
     arcs
       .append("svg:image")
       .attr("xlink:href", function (d, i) {
         return leftLine;
       })
       .attr("width", 8)
-      .attr("height", 200)
-      .attr("x", -2)
+      .attr("height", 210)
+      .attr("x", -2.5)
       .attr("y", 0)
       .attr("transform", function (d) {
         d.innerRadius = 0;
@@ -153,7 +156,7 @@ function Wheel() {
           ")translate(" +
           0 +
           ", " +
-          -d.outerRadius +
+          (-d.outerRadius - 8) +
           ")"
         );
       });
@@ -163,7 +166,7 @@ function Wheel() {
         return rightLine;
       })
       .attr("width", 8)
-      .attr("height", 200)
+      .attr("height", 210)
       .attr("x", -6)
       .attr("y", 0)
       .attr("transform", function (d) {
@@ -171,7 +174,13 @@ function Wheel() {
         d.outerRadius = r;
         d.angle = (d.startAngle + d.endAngle) / 2;
         return (
-          "rotate(" + (d.endAngle * 180) / Math.PI + ")translate(" + 0 + ", " + -d.outerRadius + ")"
+          "rotate(" +
+          (d.endAngle * 180) / Math.PI +
+          ")translate(" +
+          0 +
+          ", " +
+          (-d.outerRadius - 8) +
+          ")"
         );
       });
     // square image
@@ -198,65 +207,6 @@ function Wheel() {
           ")"
         );
       });
-    //   .on("mouseover", function (d) {
-    //     d3.select(this.parentNode)
-    //       .transition()
-    //       .duration("500")
-    //       .attr("transform", function (d) {
-    //         return "scale(1.1)";
-    //       });
-    //   })
-    //   .on("mouseout", function (d) {
-    //     d3.select(this.parentNode)
-    //       .transition()
-    //       .duration("500")
-    //       .attr("transform", function (d) {
-    //         return "scale(1)";
-    //       });
-    //   });
-
-    // NFT image
-    // arcs
-    //   .append("svg:image")
-    //   .attr("xlink:href", function (d, i) {
-    //     return NFT;
-    //   })
-    //   .attr("width", 30)
-    //   .attr("height", 30)
-    //   .attr("x", -15)
-    //   .attr("y", 0)
-    //   .attr("transform", function (d) {
-    //     d.innerRadius = 0;
-    //     d.outerRadius = r;
-    //     d.angle = (d.startAngle + d.endAngle) / 2;
-    //     return (
-    //       "rotate(" +
-    //       (d.angle * 180) / Math.PI +
-    //       ")translate(" +
-    //       0 +
-    //       ", " +
-    //       (-d.outerRadius + 50) +
-    //       ")"
-    //     );
-    //   })
-    //   .attr("style", "opacity:0.5;");
-    //   .on("mouseover", function (d) {
-    //     d3.select(this.parentNode)
-    //       .transition()
-    //       .duration("500")
-    //       .attr("transform", function (d) {
-    //         return "scale(1.1)";
-    //       });
-    //   })
-    //   .on("mouseout", function (d) {
-    //     d3.select(this.parentNode)
-    //       .transition()
-    //       .duration("500")
-    //       .attr("transform", function (d) {
-    //         return "scale(1)";
-    //       });
-    //   });
-    // .attr("transform-origin", "top left")
     // .on("mouseover", function (d) {
     //     d3.select(this.parentNode).transition()
     //         .duration('500')
@@ -270,6 +220,24 @@ function Wheel() {
     //             return "scale(1)";
     //         })
     // });
+
+    // NFT image
+    // arcs.append('svg:image')
+    //     .attr('xlink:href', function (d, i) {
+    //         return NFT;
+    //     })
+    //     .attr("width", 30)
+    //     .attr("height", 30)
+    //     .attr("x", -15)
+    //     .attr("y", 0)
+    //     .attr("transform", function (d) {
+    //         d.innerRadius = 0;
+    //         d.outerRadius = r;
+    //         d.angle = (d.startAngle + d.endAngle) / 2;
+    //         return "rotate(" + ((d.angle * 180) / Math.PI) + ")translate(" + (0) + ', ' + (-d.outerRadius + 50) + ")";
+    //     })
+    //     .attr("style", "opacity:0.5;")
+
     arcs
       .append("defs")
       .append("radialGradient")
@@ -298,7 +266,7 @@ function Wheel() {
           ")translate(" +
           0 +
           ", " +
-          -(d.outerRadius - 20) +
+          -(d.outerRadius - 15) +
           ")"
         );
       })
@@ -306,7 +274,28 @@ function Wheel() {
       .text(function (d, i) {
         return data[i].label;
       })
-      .style({ "font-size": "0.5em", "font-weight": "700", fill: "white" });
+      .style({ "font-size": "0.7em", "font-weight": "700", fill: "white" });
+    arcs
+      .append("text")
+      .attr("transform", function (d) {
+        d.innerRadius = 0;
+        d.outerRadius = r;
+        d.angle = (d.startAngle + d.endAngle) / 2;
+        return (
+          "rotate(" +
+          (d.angle * 180) / Math.PI +
+          ")translate(" +
+          0 +
+          ", " +
+          -(d.outerRadius - 30) +
+          ")"
+        );
+      })
+      .attr("text-anchor", "middle")
+      .text(function (d, i) {
+        return data[i].value;
+      })
+      .style({ "font-size": "0.7em", "font-weight": "700", fill: "rgba(0,0,0,0.5)" });
 
     //make pointer
     svg
@@ -354,7 +343,7 @@ function Wheel() {
 
   const spin = () => {
     startAudio();
-    var index = 2;
+    var index = 3;
 
     var ps = 360 / data.length;
 
