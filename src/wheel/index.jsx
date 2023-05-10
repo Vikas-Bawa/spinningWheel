@@ -216,30 +216,30 @@ function Wheel() {
     //   });
 
     // NFT image
-    arcs
-      .append("svg:image")
-      .attr("xlink:href", function (d, i) {
-        return NFT;
-      })
-      .attr("width", 30)
-      .attr("height", 30)
-      .attr("x", -15)
-      .attr("y", 0)
-      .attr("transform", function (d) {
-        d.innerRadius = 0;
-        d.outerRadius = r;
-        d.angle = (d.startAngle + d.endAngle) / 2;
-        return (
-          "rotate(" +
-          (d.angle * 180) / Math.PI +
-          ")translate(" +
-          0 +
-          ", " +
-          (-d.outerRadius + 50) +
-          ")"
-        );
-      })
-      .attr("style", "opacity:0.5;");
+    // arcs
+    //   .append("svg:image")
+    //   .attr("xlink:href", function (d, i) {
+    //     return NFT;
+    //   })
+    //   .attr("width", 30)
+    //   .attr("height", 30)
+    //   .attr("x", -15)
+    //   .attr("y", 0)
+    //   .attr("transform", function (d) {
+    //     d.innerRadius = 0;
+    //     d.outerRadius = r;
+    //     d.angle = (d.startAngle + d.endAngle) / 2;
+    //     return (
+    //       "rotate(" +
+    //       (d.angle * 180) / Math.PI +
+    //       ")translate(" +
+    //       0 +
+    //       ", " +
+    //       (-d.outerRadius + 50) +
+    //       ")"
+    //     );
+    //   })
+    //   .attr("style", "opacity:0.5;");
     //   .on("mouseover", function (d) {
     //     d3.select(this.parentNode)
     //       .transition()
@@ -354,10 +354,9 @@ function Wheel() {
 
   const spin = () => {
     startAudio();
-    var index = 21;
+    var index = 2;
 
     var ps = 360 / data.length;
-    console.log("Ps for single ", ps);
 
     var slectedIndex = (data.length - index) * ps;
     var rng = Math.floor(1 * slectedIndex + 360);
