@@ -15,17 +15,17 @@ import commonWedge9 from './assets/wedges/fortune9.png';
 
 
 export const data = [
-    { "label": "Dell LAPTOP", "value": 1, "image": commonWedge1 }, // padding
-    { "label": "IMAC PRO", "value": 2, "image": commonWedge2 }, //font-family
+    { "label": "LAPTOP", "value": 1, "image": commonWedge1 }, // padding
+    { "label": "IMAC", "value": 2, "image": commonWedge2 }, //font-family
     { "label": "SUZUKI", "value": 3, "image": commonWedge3 }, //color
     { "label": "HONDA", "value": 4, "image": commonWedge4 }, //font-weight
     { "label": "FERRARI", "value": 5, "image": commonWedge5 }, //font-size
     { "label": "APARTMENT", "value": 6, "image": commonWedge6 }, //background-color
     { "label": "IPAD PRO", "value": 7, "image": commonWedge7 }, //nesting
-    { "label": "LAND ROVER", "value": 8, "image": commonWedge8 }, //bottom
-    { "label": "MOTOROLLA", "value": 9, "image": commonWedge9 }, //sans-serif
+    { "label": "ANFIG", "value": 8, "image": commonWedge8 }, //bottom
+    { "label": "MOTO", "value": 9, "image": commonWedge9 }, //sans-serif
     { "label": "BMW", "value": 10, "image": commonWedge10 },
-    { "label": "LAMBORGHINI", "value": 11, "image": commonWedge11 },
+    { "label": "LAMBO", "value": 11, "image": commonWedge11 },
     { "label": "MCU", "value": 12, "image": commonWedge12 },
     { "label": "HOVER", "value": 13, "image": commonWedge13 },
     { "label": "CRUISER", "value": 14, "image": commonWedge14 },
