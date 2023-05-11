@@ -25,7 +25,6 @@ function Wheel() {
 
   // var container;
   var vis;
-  // var innerCircle;
 
   const startAudio = () => {
     console.log("playing sound");
@@ -91,7 +90,7 @@ function Wheel() {
           .append("stop")
           .attr("class", "start")
           .attr("offset", "0%")
-          .attr("stop-color", "black")
+          .attr("stop-color", "#ffffff")
           .attr("stop-opacity", 1);
         gardient
           .append("stop")
@@ -106,8 +105,8 @@ function Wheel() {
         return arc(d);
       })
       .attr("fill", function (d, i) {
-        return d.data.color;
-        // return "url(#svgGradient" + i + ")";
+        // return d.data.color;
+        return "url(#svgGradient" + i + ")";
       });
 
     var arc2 = d3.svg.arc().outerRadius(r).innerRadius(170);
@@ -219,10 +218,6 @@ function Wheel() {
         d.innerRadius = 0;
         d.outerRadius = r;
         d.angle = (d.startAngle + d.endAngle) / 2;
-        console.log(
-          "d.startAngle: " + d.startAngle + "d.endAngle: " + d.endAngle + "dangle : ",
-          (d.angle * 180) / Math.PI
-        );
         return (
           "rotate(" +
           (d.angle * 180) / Math.PI +
