@@ -303,30 +303,30 @@ function Wheel() {
       .attr("offset", "45%")
       .attr("stop-color", "transparent")
       .attr("stop-opacity", 1);
-    circularGrad
-      .append("stop")
-      .attr("class", "start")
-      .attr("offset", "60%")
-      .attr("stop-color", "transparent")
-      .attr("stop-opacity", 0.7);
-    circularGrad
-      .append("stop")
-      .attr("class", "start")
-      .attr("offset", "70%")
-      .attr("stop-color", "transparent")
-      .attr("stop-opacity", 0.3);
-    circularGrad
-      .append("stop")
-      .attr("class", "start")
-      .attr("offset", "95%")
-      .attr("stop-color", "black")
-      .attr("stop-opacity", 0.3);
-    circularGrad
-      .append("stop")
-      .attr("class", "end")
-      .attr("offset", "100%")
-      .attr("stop-color", "black")
-      .attr("stop-opacity", 0.3);
+    // circularGrad
+    //   .append("stop")
+    //   .attr("class", "start")
+    //   .attr("offset", "60%")
+    //   .attr("stop-color", "transparent")
+    //   .attr("stop-opacity", 0.7);
+    // circularGrad
+    //   .append("stop")
+    //   .attr("class", "start")
+    //   .attr("offset", "70%")
+    //   .attr("stop-color", "transparent")
+    //   .attr("stop-opacity", 0.3);
+    // circularGrad
+    //   .append("stop")
+    //   .attr("class", "start")
+    //   .attr("offset", "95%")
+    //   .attr("stop-color", "black")
+    //   .attr("stop-opacity", 0.3);
+    // circularGrad
+    //   .append("stop")
+    //   .attr("class", "end")
+    //   .attr("offset", "100%")
+    //   .attr("stop-color", "black")
+    //   .attr("stop-opacity", 0.3);
 
     container
       .append("svg:image")
