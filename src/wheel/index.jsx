@@ -67,10 +67,29 @@ function Wheel() {
             .attr("class", "slice");
 
         arcs.append("path")
-            .attr("fill", function (d, i) { return color(i); })
-            // .attr("fill", function (d, i) {
-            //     return "url(#wedgeImg" + (i + 1) + ")";
-            // })
+            .attr("fill", function (d, i) {
+                let grad = svg.append("radialGradient")
+                    .attr('id', ('svgGradient' + (i + 1)))
+                // .attr('cx', '0%')
+                // .attr('cy', '0%')
+                // .attr('fx', '0%')
+                // .attr('fy', '0%')
+                grad
+                    .append("stop")
+                    .attr("class", "start")
+                    .attr("offset", "0%")
+                    .attr("stop-color", 'white')
+                    .attr("stop-opacity", 1);
+                grad
+                    .append("stop")
+                    .attr("class", "end")
+                    .attr("offset", "100%")
+                    .attr("stop-color", color(i))
+                    .attr("stop-opacity", 1);
+                return "url(#svgGradient" + (i + 1) + ")";
+            })
+            .attr("fill", function (d, i) { return color(i) })
+            // .attr("fill", function (d, i) { return color(i); })
             .attr("d", function (d) { return arc(d); })
         // .on("mouseover", function (d) {
         //     d3.select(this.parentNode).transition()
@@ -89,14 +108,45 @@ function Wheel() {
 
         var arc2 = d3.svg.arc()
             .outerRadius(r)
-            .innerRadius(70);
+            .innerRadius(170);
         // var arcs2 = vis.selectAll("g.slice")
         //     .data(pie)
         //     .enter()
         //     .append("g")
         //     .attr("class", "slice");
         arcs.append("path")
-            .attr("fill", 'rgba(0,0,0,0.1)')
+            // .attr("fill", "rgba(0,0,0,0.2)")
+            // .attr("fill", function (d, i) {
+            //     let rotatedAngle = (((d.startAngle + d.endAngle) / 2) * 180) / Math.PI;
+            //     console.log(rotatedAngle);
+            //     let grad = svg.append("radialGradient")
+            //         .attr('id', ('outerGradient' + (i + 1)))
+            //         .attr("gradientTransform", "rotate(" + (0) + ")");
+            //     // .attr('cx', '0%')
+            //     // .attr('cy', '0%')
+            //     // .attr('fx', '0%')
+            //     // .attr('fy', '0%')
+            //     grad
+            //         .append("stop")
+            //         .attr("class", "start")
+            //         .attr("offset", "0%")
+            //         .attr("stop-color", 'white')
+            //         .attr("stop-opacity", 1);
+            //     // grad
+            //     //     .append("stop")
+            //     //     .attr("class", "start")
+            //     //     .attr("offset", "50%")
+            //     //     .attr("stop-color", 'white')
+            //     //     .attr("stop-opacity", 0.5);
+            //     grad
+            //         .append("stop")
+            //         .attr("class", "end")
+            //         .attr("offset", "100%")
+            //         .attr("stop-color", 'rgba(0,0,0,0.4)')
+            //         .attr("stop-opacity", 0.6);
+            //     return "url(#outerGradient" + (i + 1) + ")";
+            // })
+            .attr("fill", function (d, i) { return color(i) })
             .attr("d", function (d) { return arc2(d); })
 
         // .attr('stroke', 'black')
@@ -239,10 +289,68 @@ function Wheel() {
         innerCircle = container.append("circle")
             .attr("cx", 0)
             .attr("cy", 0)
-            .attr("r", 60)
-            .style({ "fill": "white", "cursor": "pointer" });
+            .attr("r", 210)
+            .style({ "fill": "url(#circularGradient)", "cursor": "pointer" });
         //spin text
         // innerCircle.on("click", spin);
+        let circularGrad = container.append("radialGradient")
+            .attr('id', 'circularGradient')
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "0%")
+            .attr("stop-color", 'black')
+            .attr("stop-opacity", 1);
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "30%")
+            .attr("stop-color", 'black')
+            .attr("stop-opacity", 0.2);
+        // circularGrad
+        //     .append("stop")
+        //     .attr("class", "start")
+        //     .attr("offset", "35%")
+        //     .attr("stop-color", 'black')
+        //     .attr("stop-opacity", 0.1);
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "40%")
+            .attr("stop-color", 'transparent')
+            .attr("stop-opacity", 0.7);
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "45%")
+            .attr("stop-color", 'transparent')
+            .attr("stop-opacity", 1);
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "60%")
+            .attr("stop-color", 'transparent')
+            .attr("stop-opacity", 0.7);
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "70%")
+            .attr("stop-color", 'transparent')
+            .attr("stop-opacity", 0.3);
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "95%")
+            .attr("stop-color", 'black')
+            .attr("stop-opacity", 0.3);
+        circularGrad
+            .append("stop")
+            .attr("class", "end")
+            .attr("offset", "100%")
+            .attr("stop-color", 'black')
+            .attr("stop-opacity", 0.3);
+
+
         container.append('svg:image')
             .attr('xlink:href', centrePanel)
             .attr("width", 122)
