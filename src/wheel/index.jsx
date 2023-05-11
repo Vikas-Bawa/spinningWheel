@@ -13,377 +13,378 @@ import wheel from "../assets/wheel.mp3";
 import "./style.css";
 
 function Wheel() {
-  const onMountRef = useRef(true);
-  var padding = { top: 10, right: 50, bottom: 10, left: 50 },
-    w = 520 - padding.left - padding.right,
-    h = 520 - padding.top - padding.bottom,
-    r = Math.min(w, h) / 2,
-    rotation = 0,
-    oldrotation = 0,
-    picked = 100000;
+    const onMountRef = useRef(true);
+    var padding = { top: 20, right: 50, bottom: 10, left: 50 },
+        w = 520 - padding.left - padding.right,
+        h = 530 - padding.top - padding.bottom,
+        r = Math.min(w, h) / 2,
+        rotation = 0,
+        oldrotation = 0,
+        picked = 100000;
 
-  var vis;
+    var vis;
+    var pointerImg;
+    var spinText;
 
-  const startAudio = () => {
-    console.log("playing sound");
-    new Audio(wheel).play();
-    setTimeout(() => {
-      new Audio(applause).play();
-    }, 6000);
-  };
-
-  useEffect(() => {
-    if (!onMountRef.current) return;
-    onMountRef.current = false;
-    var svg = d3
-      .select("#chart")
-      .append("svg")
-      .data([data])
-      .attr("width", w + padding.left + padding.right)
-      .attr("height", h + padding.top + padding.bottom);
-    svg
-      .append("svg:image")
-      .attr("xlink:href", frame)
-      .attr("width", "515")
-      .attr("height", "515")
-      .attr("x", 0)
-      .attr("y", 0);
-
-    var container = svg
-      .append("g")
-      .attr("class", "chartholder")
-      .attr(
-        "transform",
-        "translate(" + (w / 2 + padding.left - 2) + "," + (h / 2 + padding.top + 12) + ")"
-      );
-    vis = container.append("g");
-    const createGradient = (select) => {
-      return svg
-        .append("radialGradient")
-        .attr("id", `svgGradient` + select)
-        .attr("x1", "0%")
-        .attr("x2", "0%")
-        .attr("y1", "0%")
-        .attr("cx", "35%") //Move the x-center location towards the left
-        .attr("cy", "0%") //Move the y-center location towards the top
-        .attr("r", "60%")
-        .attr("y2", "0%");
+    const startAudio = () => {
+        console.log("playing sound");
+        new Audio(wheel).play();
+        setTimeout(() => {
+            new Audio(applause).play();
+        }, 6000);
     };
 
-    var pie = d3.layout
-      .pie()
-      .sort(null)
-      .value(function () {
-        return 1;
-      });
-    // declare an arc generator function
-    var arc = d3.svg.arc().outerRadius(r).innerRadius(0);
-    var arcs = vis.selectAll("g.slice").data(pie).enter().append("g").attr("class", "slice");
+    useEffect(() => {
+        if (!onMountRef.current) return;
+        onMountRef.current = false;
+        var svg = d3
+            .select("#chart")
+            .append("svg")
+            .data([data])
+            .attr("width", w + padding.left + padding.right)
+            .attr("height", h + padding.top + padding.bottom);
+        svg
+            .append("svg:image")
+            .attr("xlink:href", frame)
+            .attr("width", "515")
+            .attr("height", "515")
+            .attr("x", 0)
+            .attr("y", 10);
 
-    arcs
-      .append("path")
-      .attr("fill", function (d, i) {
-        let gardient = createGradient(i);
-        gardient
-          .append("stop")
-          .attr("class", "start")
-          .attr("offset", "0%")
-          .attr("stop-color", "#ffffff")
-          .attr("stop-opacity", 1);
-        gardient
-          .append("stop")
-          .attr("class", "end")
-          .attr("offset", "100%")
-          .attr("stop-color", function () {
-            return d.data.color;
-          })
-          .attr("stop-opacity", 1);
-        return "url(#svgGradient" + i + ")";
-      })
-      .attr("d", function (d) {
-        return arc(d);
-      });
-    // .attr("fill", function (d, i) {
-    //   // return d.data.color;
-    // });
+        var container = svg
+            .append("g")
+            .attr("class", "chartholder")
+            .attr(
+                "transform",
+                "translate(" + (w / 2 + padding.left - 2) + "," + (h / 2 + padding.top + 12) + ")"
+            );
+        vis = container.append("g");
+        const createGradient = (select) => {
+            return svg
+                .append("radialGradient")
+                .attr("id", `svgGradient` + select)
+                .attr("x1", "0%")
+                .attr("x2", "0%")
+                .attr("y1", "0%")
+                .attr("cx", "35%") //Move the x-center location towards the left
+                .attr("cy", "0%") //Move the y-center location towards the top
+                .attr("r", "60%")
+                .attr("y2", "0%");
+        };
 
-    var arc2 = d3.svg.arc().outerRadius(r).innerRadius(170);
+        var pie = d3.layout
+            .pie()
+            .sort(null)
+            .value(function () {
+                return 1;
+            });
+        // declare an arc generator function
+        var arc = d3.svg.arc().outerRadius(r).innerRadius(0);
+        var arcs = vis.selectAll("g.slice").data(pie).enter().append("g").attr("class", "slice");
 
-    arcs
-      .append("path")
-      .attr("fill", "rgba(0,0,0,0.1)")
-      .attr("d", function (d) {
-        return arc2(d);
-      });
+        arcs
+            .append("path")
+            .attr("fill", function (d, i) {
+                let gardient = createGradient(i);
+                gardient
+                    .append("stop")
+                    .attr("class", "start")
+                    .attr("offset", "0%")
+                    .attr("stop-color", "#ffffff")
+                    .attr("stop-opacity", 1);
+                gardient
+                    .append("stop")
+                    .attr("class", "end")
+                    .attr("offset", "100%")
+                    .attr("stop-color", function () {
+                        return d.data.color;
+                    })
+                    .attr("stop-opacity", 1);
+                return "url(#svgGradient" + i + ")";
+            })
+            .attr("d", function (d) {
+                return arc(d);
+            });
+        // .attr("fill", function (d, i) {
+        //   // return d.data.color;
+        // });
 
-    var arc3 = d3.svg.arc().outerRadius(170).innerRadius(170);
-    arcs
-      .append("path")
-      .attr("fill", "rgba(0,0,0,1)")
-      .attr("d", function (d) {
-        return arc3(d);
-      })
-      .attr("stroke", "rgba(0,0,0,0.3)")
-      .attr("stroke-width", "0.5")
-      .attr("stroke-dasharray", "2 2");
+        var arc2 = d3.svg.arc().outerRadius(r).innerRadius(170);
 
-    arcs
-      .append("svg:image")
-      .attr("xlink:href", function () {
-        return leftLine;
-      })
-      .attr("width", 8)
-      .attr("height", 210)
-      .attr("x", -2.5)
-      .attr("y", 0)
-      .attr("transform", function (d) {
-        d.innerRadius = 0;
-        d.outerRadius = r;
-        d.angle = (d.startAngle + d.endAngle) / 2;
-        return (
-          "rotate(" +
-          (d.startAngle * 180) / Math.PI +
-          ")translate(" +
-          0 +
-          ", " +
-          (-d.outerRadius - 8) +
-          ")"
-        );
-      });
-    arcs
-      .append("svg:image")
-      .attr("xlink:href", function () {
-        return rightLine;
-      })
-      .attr("width", 8)
-      .attr("height", 210)
-      .attr("x", -6)
-      .attr("y", 0)
-      .attr("transform", function (d) {
-        d.innerRadius = 0;
-        d.outerRadius = r;
-        d.angle = (d.startAngle + d.endAngle) / 2;
-        return (
-          "rotate(" +
-          (d.endAngle * 180) / Math.PI +
-          ")translate(" +
-          0 +
-          ", " +
-          (-d.outerRadius - 8) +
-          ")"
-        );
-      });
-    // square image
-    arcs
-      .append("svg:image")
-      .attr("xlink:href", function () {
-        return square;
-      })
-      .attr("width", 10)
-      .attr("height", 10)
-      .attr("x", -5)
-      .attr("y", 0)
-      .attr("transform", function (d) {
-        d.innerRadius = 0;
-        d.outerRadius = r;
-        d.angle = (d.startAngle + d.endAngle) / 2;
-        return (
-          "rotate(" +
-          (d.angle * 180) / Math.PI +
-          ")translate(" +
-          0 +
-          ", " +
-          (-d.outerRadius + 35) +
-          ")"
-        );
-      });
+        arcs
+            .append("path")
+            .attr("fill", "rgba(0,0,0,0.1)")
+            .attr("d", function (d) {
+                return arc2(d);
+            });
 
-    arcs
-      .append("defs")
-      .append("radialGradient")
-      .attr("id", function (d, i) {
-        return "grad" + (i + 1);
-      })
-      .attr("cx", "0%")
-      .attr("cy", "0%")
-      .attr("r", "100%")
-      .attr("fx", "0%")
-      .attr("fy", "100%");
+        var arc3 = d3.svg.arc().outerRadius(170).innerRadius(170);
+        arcs
+            .append("path")
+            .attr("fill", "rgba(0,0,0,1)")
+            .attr("d", function (d) {
+                return arc3(d);
+            })
+            .attr("stroke", "rgba(0,0,0,0.3)")
+            .attr("stroke-width", "0.5")
+            .attr("stroke-dasharray", "2 2");
 
-    arcs
-      .append("text")
-      .attr("transform", function (d) {
-        d.innerRadius = 0;
-        d.outerRadius = r;
-        d.angle = (d.startAngle + d.endAngle) / 2;
-        return (
-          "rotate(" +
-          (d.angle * 180) / Math.PI +
-          ")translate(" +
-          0 +
-          ", " +
-          -(d.outerRadius - 15) +
-          ")"
-        );
-      })
-      .attr("text-anchor", "middle")
-      .text(function (d, i) {
-        return data[i].label;
-      })
-      .style({ "font-size": "0.7em", "font-weight": "700", fill: "white" });
-    arcs
-      .append("text")
-      .attr("transform", function (d) {
-        d.innerRadius = 0;
-        d.outerRadius = r;
-        d.angle = (d.startAngle + d.endAngle) / 2;
-        return (
-          "rotate(" +
-          (d.angle * 180) / Math.PI +
-          ")translate(" +
-          0 +
-          ", " +
-          -(d.outerRadius - 30) +
-          ")"
-        );
-      })
-      .attr("text-anchor", "middle")
-      .text(function (d, i) {
-        return data[i].value;
-      })
-      .style({ "font-size": "0.7em", "font-weight": "700", fill: "rgba(0,0,0,0.5)" });
+        arcs
+            .append("svg:image")
+            .attr("xlink:href", function () {
+                return leftLine;
+            })
+            .attr("width", 8)
+            .attr("height", 210)
+            .attr("x", -2.5)
+            .attr("y", 0)
+            .attr("transform", function (d) {
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle) / 2;
+                return (
+                    "rotate(" +
+                    (d.startAngle * 180) / Math.PI +
+                    ")translate(" +
+                    0 +
+                    ", " +
+                    (-d.outerRadius - 8) +
+                    ")"
+                );
+            });
+        arcs
+            .append("svg:image")
+            .attr("xlink:href", function () {
+                return rightLine;
+            })
+            .attr("width", 8)
+            .attr("height", 210)
+            .attr("x", -6)
+            .attr("y", 0)
+            .attr("transform", function (d) {
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle) / 2;
+                return (
+                    "rotate(" +
+                    (d.endAngle * 180) / Math.PI +
+                    ")translate(" +
+                    0 +
+                    ", " +
+                    (-d.outerRadius - 8) +
+                    ")"
+                );
+            });
+        // square image
+        arcs
+            .append("svg:image")
+            .attr("xlink:href", function () {
+                return square;
+            })
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("x", -5)
+            .attr("y", 0)
+            .attr("transform", function (d) {
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle) / 2;
+                return (
+                    "rotate(" +
+                    (d.angle * 180) / Math.PI +
+                    ")translate(" +
+                    0 +
+                    ", " +
+                    (-d.outerRadius + 35) +
+                    ")"
+                );
+            });
 
-    //make pointer
-    svg
-      .append("svg:image")
-      .attr("xlink:href", pointer)
-      .attr("width", 60)
-      .attr("height", 80)
-      .attr("x", 228)
-      .attr("y", 10);
+        arcs
+            .append("defs")
+            .append("radialGradient")
+            .attr("id", function (d, i) {
+                return "grad" + (i + 1);
+            })
+            .attr("cx", "0%")
+            .attr("cy", "0%")
+            .attr("r", "100%")
+            .attr("fx", "0%")
+            .attr("fy", "100%");
 
-    //draw spin circle
+        arcs
+            .append("text")
+            .attr("transform", function (d) {
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle) / 2;
+                return (
+                    "rotate(" +
+                    (d.angle * 180) / Math.PI +
+                    ")translate(" +
+                    0 +
+                    ", " +
+                    -(d.outerRadius - 15) +
+                    ")"
+                );
+            })
+            .attr("text-anchor", "middle")
+            .text(function (d, i) {
+                return data[i].label;
+            })
+            .style({ "font-size": "0.7em", "font-weight": "700", fill: "white" });
+        arcs
+            .append("text")
+            .attr("transform", function (d) {
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle) / 2;
+                return (
+                    "rotate(" +
+                    (d.angle * 180) / Math.PI +
+                    ")translate(" +
+                    0 +
+                    ", " +
+                    -(d.outerRadius - 30) +
+                    ")"
+                );
+            })
+            .attr("text-anchor", "middle")
+            .text(function (d, i) {
+                return data[i].value;
+            })
+            .style({ "font-size": "0.7em", "font-weight": "700", fill: "rgba(0,0,0,0.5)" });
 
-    container
-      .append("circle")
-      .attr("cx", 0)
-      .attr("cy", 0)
-      .attr("r", 210)
-      .style({ fill: "url(#circularGradient)", cursor: "pointer" });
-    //spin text
-    // innerCircle.on("click", spin);
-    let circularGrad = container.append("radialGradient").attr("id", "circularGradient");
-    circularGrad
-      .append("stop")
-      .attr("class", "start")
-      .attr("offset", "0%")
-      .attr("stop-color", "black")
-      .attr("stop-opacity", 1);
-    circularGrad
-      .append("stop")
-      .attr("class", "start")
-      .attr("offset", "30%")
-      .attr("stop-color", "black")
-      .attr("stop-opacity", 0.2);
-    // circularGrad
-    //     .append("stop")
-    //     .attr("class", "start")
-    //     .attr("offset", "35%")
-    //     .attr("stop-color", 'black')
-    //     .attr("stop-opacity", 0.1);
-    circularGrad
-      .append("stop")
-      .attr("class", "start")
-      .attr("offset", "40%")
-      .attr("stop-color", "transparent")
-      .attr("stop-opacity", 0.7);
-    circularGrad
-      .append("stop")
-      .attr("class", "start")
-      .attr("offset", "45%")
-      .attr("stop-color", "transparent")
-      .attr("stop-opacity", 1);
-    // circularGrad
-    //   .append("stop")
-    //   .attr("class", "start")
-    //   .attr("offset", "60%")
-    //   .attr("stop-color", "transparent")
-    //   .attr("stop-opacity", 0.7);
-    // circularGrad
-    //   .append("stop")
-    //   .attr("class", "start")
-    //   .attr("offset", "70%")
-    //   .attr("stop-color", "transparent")
-    //   .attr("stop-opacity", 0.3);
-    // circularGrad
-    //   .append("stop")
-    //   .attr("class", "start")
-    //   .attr("offset", "95%")
-    //   .attr("stop-color", "black")
-    //   .attr("stop-opacity", 0.3);
-    // circularGrad
-    //   .append("stop")
-    //   .attr("class", "end")
-    //   .attr("offset", "100%")
-    //   .attr("stop-color", "black")
-    //   .attr("stop-opacity", 0.3);
+        //make pointer
+        pointerImg = svg
+            .append("svg:image")
+            .attr("xlink:href", pointer)
+            .attr("width", 80)
+            .attr("height", 80)
+            .attr("x", 218)
+            .attr("y", 5);
 
-    container
-      .append("svg:image")
-      .attr("xlink:href", centrePanel)
-      .attr("width", 122)
-      .attr("height", 122)
-      .attr("x", -61)
-      .attr("y", -61);
-    container
-      .append("svg:image")
-      .attr("xlink:href", spinTxt)
-      .attr("width", 120)
-      .attr("height", 60)
-      .attr("x", -60)
-      .attr("y", -40)
-      .on("click", spin)
-      .style({ cursor: "pointer" });
-  });
 
-  const spin = () => {
-    startAudio();
-    var index = 3;
+        //draw spin circle
 
-    var ps = 360 / data.length;
+        container
+            .append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 210)
+            .style({ fill: "url(#circularGradient)", cursor: "pointer" });
+        //spin text
+        let circularGrad = container.append("radialGradient").attr("id", "circularGradient");
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "0%")
+            .attr("stop-color", "black")
+            .attr("stop-opacity", 1);
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "30%")
+            .attr("stop-color", "black")
+            .attr("stop-opacity", 0.2);
 
-    var slectedIndex = (data.length - index) * ps;
-    var rng = Math.floor(1 * slectedIndex + 360);
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "40%")
+            .attr("stop-color", "transparent")
+            .attr("stop-opacity", 0.7);
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "45%")
+            .attr("stop-color", "transparent")
+            .attr("stop-opacity", 1);
 
-    rotation = Math.round(rng / ps) * ps;
-    picked = Math.round(data.length - (rotation % 360) / ps);
-    picked = picked >= data.length ? picked % data.length : picked;
+        container
+            .append("svg:image")
+            .attr("xlink:href", centrePanel)
+            .attr("width", 122)
+            .attr("height", 122)
+            .attr("x", -61)
+            .attr("y", -61);
+        spinText = container
+            .append("svg:image")
+            .attr("xlink:href", spinTxt)
+            .attr("width", 100)
+            .attr("height", 60)
+            .attr("x", -50)
+            .attr("y", -40)
+            .on("click", spin)
+            .style({ cursor: "pointer" });
+    });
 
-    rotation += Math.round(ps / 2);
+    const spin = () => {
+        startAudio();
+        spinText.on("click", null);
+        var index = 3;
+        var ps = 360 / data.length;
 
-    vis
-      .transition()
-      .duration(6000)
-      .attrTween("transform", rotTween)
-      .each("end", function () {
-        d3.select(".slice:nth-child(" + (picked + 1) + ") path");
-        console.log(data[picked].value);
-        oldrotation = rotation;
-      });
-  };
+        var slectedIndex = (data.length - index) * ps;
+        var rng = Math.floor(1 * slectedIndex + 360 * 5);
 
-  function rotTween() {
-    var i = d3.interpolate(oldrotation % 360, rotation);
-    return function (t) {
-      return "rotate(" + i(t) + ")";
+        rotation = Math.round(rng / ps) * ps;
+        picked = Math.round(data.length - (rotation % 360) / ps);
+        picked = picked >= data.length ? picked % data.length : picked;
+
+        rotation += Math.round(ps / 2);
+
+        vis
+            .transition()
+            .duration(10000)
+            .attrTween("transform", rotTween)
+            .each("end", function () {
+                d3.select(".slice:nth-child(" + (picked + 1) + ") path");
+                console.log(data[picked].value);
+                oldrotation = rotation;
+
+                spinText.on("click", spin);
+            });
+        // pointerImg.transition()
+        //     .attr('style', 'transform:rotate(-20deg) translate(-27px, 87px);')
+        //     .ease('linear')
+        //     // .style("transform", "rotate(-20deg) translate(-27px, 87px);")
+        //     // .attr('x', 250)
+        //     .duration(1000)
+
+        function tween(d, i, a) {
+            return d3.interpolateString("rotate(-60, 150, 130)  translate(-25px, 87px);", "rotate(-20) translate(-27px, 87px);");
+        }
+        turnNeedle();
+        function turnNeedle() {
+
+            pointerImg
+                .transition()
+                .duration(2000)
+                .attrTween("transform", tween);
+
+
+        }
+        // function tween(d, i, a) {
+        //     return d3.interpolateString('rotate(-20deg) translate(-27px, 87px);');
+
+        // }
+
+
     };
-  }
 
-  return (
-    <>
-      <div id="chart"></div>
-    </>
-  );
+    function rotTween() {
+        var i = d3.interpolate(oldrotation % 360, rotation);
+        return function (t) {
+            return "rotate(" + i(t) + ")";
+        };
+    }
+
+    return (
+        <>
+            <div id="chart"></div>
+        </>
+    );
 }
 
 export default Wheel;
