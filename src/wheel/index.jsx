@@ -86,9 +86,10 @@ function Wheel() {
         //         })
         // })
 
+
         var arc2 = d3.svg.arc()
             .outerRadius(r)
-            .innerRadius(170);
+            .innerRadius(70);
         // var arcs2 = vis.selectAll("g.slice")
         //     .data(pie)
         //     .enter()
@@ -100,6 +101,7 @@ function Wheel() {
 
         // .attr('stroke', 'black')
         // .attr('stroke-width', '0.5')
+
 
         var arc3 = d3.svg.arc()
             .outerRadius(170)
@@ -229,7 +231,7 @@ function Wheel() {
             .attr('xlink:href', pointer)
             .attr("width", 60)
             .attr("height", 80)
-            .attr("x", 219)
+            .attr("x", 228)
             .attr("y", 10)
 
         //draw spin circle
@@ -265,54 +267,66 @@ function Wheel() {
         //     .style({ "font-weight": "bold", "font-size": "30px" });
     }, [])
 
-    const spin = (d) => {
+    // const spin = (d) => {
+    //     startAudio();
+    //     innerCircle.on("click", null);
+    //     //all slices have been seen, all done
+    //     debugger;
+    //     var ps = 360 / data.length,
+    //         rng = Math.floor((1 * 1440) + 360);
+    //     rotation = (Math.round(rng / ps) * ps);
+
+    //     picked = Math.round(data.length - (rotation % 360) / ps);
+    //     picked = picked >= data.length ? (picked % data.length) : picked;
+
+    //     // if (oldpick.indexOf(picked) !== -1) {
+    //     //     d3.select(this).call(spin);
+    //     //     return;
+    //     // } else {
+    //     //     // oldpick.push(picked);
+    //     // }
+    //     rotation += 90 - Math.round(ps / 2);
+    //     vis.transition()
+    //         .duration(6000)
+    //         .attrTween("transform", rotTween)
+    //         .each("end", function () {
+    //             //mark question as seen
+    //             d3.select(".slice:nth-child(" + (picked + 1) + ") path")
+    //             // .attr("fill", "grey");
+    //             oldrotation = rotation;
+
+    //             /* Get the result value from object "data" */
+    //             console.log(data[picked].label)
+
+    //             /* Comment the below line for restrict spin to sngle time */
+    //             innerCircle.on("click", spin);
+    //         });
+    // }
+    const spin = () => {
         startAudio();
-        innerCircle.on("click", null);
-        //all slices have been seen, all done
-        console.log("OldPick: " + oldpick.length, "Data length: " + data.length);
-        // if (oldpick.length == data.length) {
-        //     console.log("done");
-        //     innerCircle.on("click", null);
-        //     return;
-        // }
-        debugger;
-        var ps = 360 / data.length,
-            pieslice = Math.round(1440 / data.length),
-            rng = Math.floor((1 * 1440) + 360);
-        console.log('rng', rng);
-        rotation = (Math.round(rng / ps) * ps);
-        console.log('rotation...', rotation)
+        var index = 10;
 
+        var ps = 360 / data.length;
+        // debugger;
+        var slectedIndex = (data.length - index) * ps;
+        var rng = Math.floor(1 * slectedIndex + 360 * 10);
+
+        rotation = Math.round(rng / ps) * ps;
         picked = Math.round(data.length - (rotation % 360) / ps);
-        console.log('picked...', picked);
-        picked = picked >= data.length ? (picked % data.length) : picked;
-        console.log('picked...', picked);
+        picked = picked >= data.length ? picked % data.length : picked;
 
-        if (oldpick.indexOf(picked) !== -1) {
-            d3.select(this).call(spin);
-            return;
-        } else {
-            // oldpick.push(picked);
-        }
-        rotation += 90 - Math.round(ps / 2);
-        console.log('Math round value ...', Math.round(ps / 2));
-        console.log('rotation...', rotation)
-        vis.transition()
-            .duration(6000)
+        rotation += Math.round(ps / 2);
+
+        vis
+            .transition()
+            .duration(10000)
             .attrTween("transform", rotTween)
             .each("end", function () {
-                //mark question as seen
-                d3.select(".slice:nth-child(" + (picked + 1) + ") path")
-                // .attr("fill", "grey");
+                d3.select(".slice:nth-child(" + (picked + 1) + ") path");
+                console.log(data[picked].value);
                 oldrotation = rotation;
-
-                /* Get the result value from object "data" */
-                console.log(data[picked].label)
-
-                /* Comment the below line for restrict spin to sngle time */
-                innerCircle.on("click", spin);
             });
-    }
+    };
 
     function rotTween(to) {
         var i = d3.interpolate(oldrotation % 360, rotation);
