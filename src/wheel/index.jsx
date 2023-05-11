@@ -25,6 +25,7 @@ function Wheel() {
     var container;
     var vis;
     var innerCircle;
+    var vis2;
 
     const startAudio = () => {
         console.log('playing sound')
@@ -56,7 +57,7 @@ function Wheel() {
         vis = container.append("g");
 
         var pie = d3.layout.pie().sort(null).value(function (d) { return 1; });
-        // declare an arc generator function
+
         var arc = d3.svg.arc()
             .outerRadius(r)
             .innerRadius(0);
@@ -67,91 +68,8 @@ function Wheel() {
             .attr("class", "slice");
 
         arcs.append("path")
-            .attr("fill", function (d, i) {
-                let grad = svg.append("radialGradient")
-                    .attr('id', ('svgGradient' + (i + 1)))
-                // .attr('cx', '0%')
-                // .attr('cy', '0%')
-                // .attr('fx', '0%')
-                // .attr('fy', '0%')
-                grad
-                    .append("stop")
-                    .attr("class", "start")
-                    .attr("offset", "0%")
-                    .attr("stop-color", 'white')
-                    .attr("stop-opacity", 1);
-                grad
-                    .append("stop")
-                    .attr("class", "end")
-                    .attr("offset", "100%")
-                    .attr("stop-color", color(i))
-                    .attr("stop-opacity", 1);
-                return "url(#svgGradient" + (i + 1) + ")";
-            })
             .attr("fill", function (d, i) { return color(i) })
-            // .attr("fill", function (d, i) { return color(i); })
             .attr("d", function (d) { return arc(d); })
-        // .on("mouseover", function (d) {
-        //     d3.select(this.parentNode).transition()
-        //         .duration('500')
-        //         .attr("transform", function (d) {
-        //             return "scale(1.1)";
-        //         })
-        // }).on("mouseout", function (d) {
-        //     d3.select(this.parentNode).transition()
-        //         .duration('500')
-        //         .attr("transform", function (d) {
-        //             return "scale(1)";
-        //         })
-        // })
-
-
-        var arc2 = d3.svg.arc()
-            .outerRadius(r)
-            .innerRadius(170);
-        // var arcs2 = vis.selectAll("g.slice")
-        //     .data(pie)
-        //     .enter()
-        //     .append("g")
-        //     .attr("class", "slice");
-        arcs.append("path")
-            // .attr("fill", "rgba(0,0,0,0.2)")
-            // .attr("fill", function (d, i) {
-            //     let rotatedAngle = (((d.startAngle + d.endAngle) / 2) * 180) / Math.PI;
-            //     console.log(rotatedAngle);
-            //     let grad = svg.append("radialGradient")
-            //         .attr('id', ('outerGradient' + (i + 1)))
-            //         .attr("gradientTransform", "rotate(" + (0) + ")");
-            //     // .attr('cx', '0%')
-            //     // .attr('cy', '0%')
-            //     // .attr('fx', '0%')
-            //     // .attr('fy', '0%')
-            //     grad
-            //         .append("stop")
-            //         .attr("class", "start")
-            //         .attr("offset", "0%")
-            //         .attr("stop-color", 'white')
-            //         .attr("stop-opacity", 1);
-            //     // grad
-            //     //     .append("stop")
-            //     //     .attr("class", "start")
-            //     //     .attr("offset", "50%")
-            //     //     .attr("stop-color", 'white')
-            //     //     .attr("stop-opacity", 0.5);
-            //     grad
-            //         .append("stop")
-            //         .attr("class", "end")
-            //         .attr("offset", "100%")
-            //         .attr("stop-color", 'rgba(0,0,0,0.4)')
-            //         .attr("stop-opacity", 0.6);
-            //     return "url(#outerGradient" + (i + 1) + ")";
-            // })
-            .attr("fill", function (d, i) { return color(i) })
-            .attr("d", function (d) { return arc2(d); })
-
-        // .attr('stroke', 'black')
-        // .attr('stroke-width', '0.5')
-
 
         var arc3 = d3.svg.arc()
             .outerRadius(170)
@@ -162,66 +80,6 @@ function Wheel() {
             .attr("stroke", 'rgba(0,0,0,0.3)')
             .attr("stroke-width", '0.5')
             .attr('stroke-dasharray', '2 2')
-
-        // .attr('stroke', 'grey')
-
-
-        arcs.append('svg:image')
-            .attr('xlink:href', function (d, i) {
-                return leftLine;
-            })
-            .attr("width", 8)
-            .attr("height", 210)
-            .attr("x", -2.5)
-            .attr("y", 0)
-            .attr("transform", function (d) {
-                d.innerRadius = 0;
-                d.outerRadius = r;
-                d.angle = (d.startAngle + d.endAngle) / 2;
-                return "rotate(" + ((d.startAngle * 180) / Math.PI) + ")translate(" + (0) + ', ' + (-d.outerRadius - 8) + ")";
-            })
-        arcs.append('svg:image')
-            .attr('xlink:href', function (d, i) {
-                return rightLine;
-            })
-            .attr("width", 8)
-            .attr("height", 210)
-            .attr("x", -6)
-            .attr("y", 0)
-            .attr("transform", function (d) {
-                d.innerRadius = 0;
-                d.outerRadius = r;
-                d.angle = (d.startAngle + d.endAngle) / 2;
-                return "rotate(" + ((d.endAngle * 180) / Math.PI) + ")translate(" + (0) + ', ' + (-d.outerRadius - 8) + ")";
-            });
-        // square image
-        arcs.append('svg:image')
-            .attr('xlink:href', function (d, i) {
-                return square;
-            })
-            .attr("width", 10)
-            .attr("height", 10)
-            .attr("x", -5)
-            .attr("y", 0)
-            .attr("transform", function (d) {
-                d.innerRadius = 0;
-                d.outerRadius = r;
-                d.angle = (d.startAngle + d.endAngle) / 2;
-                return "rotate(" + ((d.angle * 180) / Math.PI) + ")translate(" + (0) + ', ' + (-d.outerRadius + 35) + ")";
-            })
-        // .on("mouseover", function (d) {
-        //     d3.select(this.parentNode).transition()
-        //         .duration('500')
-        //         .attr("transform", function (d) {
-        //             return "scale(1.1)";
-        //         })
-        // }).on("mouseout", function (d) {
-        //     d3.select(this.parentNode).transition()
-        //         .duration('500')
-        //         .attr("transform", function (d) {
-        //             return "scale(1)";
-        //         })
-        // });
 
         // NFT image
         // arcs.append('svg:image')
@@ -241,16 +99,31 @@ function Wheel() {
         //     .attr("style", "opacity:0.5;")
 
 
-        arcs.append("defs")
-            .append("radialGradient")
-            .attr('id', function (d, i) { return 'grad' + (i + 1) })
-            .attr('cx', '0%')
-            .attr('cy', '0%')
-            .attr('r', '100%')
-            .attr('fx', '0%')
-            .attr('fy', '100%')
+        //make pointer
+        svg.append('svg:image')
+            .attr('xlink:href', pointer)
+            .attr("width", 60)
+            .attr("height", 80)
+            .attr("x", 228)
+            .attr("y", 10)
 
-        arcs.append("text")
+        //draw spin circle
+        innerCircle = container.append("circle")
+            .attr("cx", 0)
+            .attr("cy", 0)
+            .attr("r", 210)
+            .style({ "fill": "url(#circularGradient)" });
+
+        vis2 = container.append('g')
+        var gradArc = d3.svg.arc()
+            .outerRadius(r)
+            .innerRadius(0);
+        var gradArcs = vis2.selectAll("g.sliceTxt")
+            .data(pie)
+            .enter()
+            .append("g")
+            .attr("class", "sliceTxt");
+        gradArcs.append("text")
             .attr("transform", function (d) {
                 d.innerRadius = 0;
                 d.outerRadius = r;
@@ -262,8 +135,8 @@ function Wheel() {
             .text(function (d, i) {
                 return data[i].label;
             })
-            .style({ "font-size": "0.7em", "font-weight": "700", 'fill': 'white' })
-        arcs.append("text")
+            .style({ "font-size": "0.7em", "font-weight": "700", 'fill': 'white' });
+        gradArcs.append("text")
             .attr("transform", function (d) {
                 d.innerRadius = 0;
                 d.outerRadius = r;
@@ -274,23 +147,51 @@ function Wheel() {
             .text(function (d, i) {
                 return data[i].value;
             })
-            .style({ "font-size": "0.7em", "font-weight": "700", 'fill': 'rgba(0,0,0,0.5)' })
+            .style({ "font-size": "0.7em", "font-weight": "700", 'fill': 'rgba(0,0,0,0.5)' });
+        gradArcs.append('svg:image')
+            .attr('xlink:href', function (d, i) {
+                return leftLine;
+            })
+            .attr("width", 8)
+            .attr("height", 210)
+            .attr("x", -2.5)
+            .attr("y", 0)
+            .attr("transform", function (d) {
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle) / 2;
+                return "rotate(" + ((d.startAngle * 180) / Math.PI) + ")translate(" + (0) + ', ' + (-d.outerRadius - 8) + ")";
+            })
+        gradArcs.append('svg:image')
+            .attr('xlink:href', function (d, i) {
+                return rightLine;
+            })
+            .attr("width", 8)
+            .attr("height", 210)
+            .attr("x", -6)
+            .attr("y", 0)
+            .attr("transform", function (d) {
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle) / 2;
+                return "rotate(" + ((d.endAngle * 180) / Math.PI) + ")translate(" + (0) + ', ' + (-d.outerRadius - 8) + ")";
+            });
+        // square image
+        gradArcs.append('svg:image')
+            .attr('xlink:href', function (d, i) {
+                return square;
+            })
+            .attr("width", 10)
+            .attr("height", 10)
+            .attr("x", -5)
+            .attr("y", 0)
+            .attr("transform", function (d) {
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle) / 2;
+                return "rotate(" + ((d.angle * 180) / Math.PI) + ")translate(" + (0) + ', ' + (-d.outerRadius + 35) + ")";
+            })
 
-        //make pointer
-        svg.append('svg:image')
-            .attr('xlink:href', pointer)
-            .attr("width", 60)
-            .attr("height", 80)
-            .attr("x", 228)
-            .attr("y", 10)
-
-        //draw spin circle
-
-        innerCircle = container.append("circle")
-            .attr("cx", 0)
-            .attr("cy", 0)
-            .attr("r", 210)
-            .style({ "fill": "url(#circularGradient)", "cursor": "pointer" });
         //spin text
         // innerCircle.on("click", spin);
         let circularGrad = container.append("radialGradient")
@@ -340,16 +241,34 @@ function Wheel() {
         circularGrad
             .append("stop")
             .attr("class", "start")
-            .attr("offset", "95%")
+            .attr("offset", "80%")
+            .attr("stop-color", 'black')
+            .attr("stop-opacity", 0.1);
+
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "85%")
             .attr("stop-color", 'black')
             .attr("stop-opacity", 0.3);
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "92%")
+            .attr("stop-color", 'black')
+            .attr("stop-opacity", 0.5);
+        circularGrad
+            .append("stop")
+            .attr("class", "start")
+            .attr("offset", "95%")
+            .attr("stop-color", 'black')
+            .attr("stop-opacity", 0.5);
         circularGrad
             .append("stop")
             .attr("class", "end")
             .attr("offset", "100%")
             .attr("stop-color", 'black')
             .attr("stop-opacity", 0.3);
-
 
         container.append('svg:image')
             .attr('xlink:href', centrePanel)
@@ -366,50 +285,8 @@ function Wheel() {
             .on("click", spin)
             .style({ "cursor": "pointer" });
 
-
-        // container.append("text")
-        //     .attr("x", 0)
-        //     .attr("y", 12)
-        //     .attr("text-anchor", "middle")
-        //     .text("SPIN")
-        //     .style({ "font-weight": "bold", "font-size": "30px" });
     }, [])
 
-    // const spin = (d) => {
-    //     startAudio();
-    //     innerCircle.on("click", null);
-    //     //all slices have been seen, all done
-    //     debugger;
-    //     var ps = 360 / data.length,
-    //         rng = Math.floor((1 * 1440) + 360);
-    //     rotation = (Math.round(rng / ps) * ps);
-
-    //     picked = Math.round(data.length - (rotation % 360) / ps);
-    //     picked = picked >= data.length ? (picked % data.length) : picked;
-
-    //     // if (oldpick.indexOf(picked) !== -1) {
-    //     //     d3.select(this).call(spin);
-    //     //     return;
-    //     // } else {
-    //     //     // oldpick.push(picked);
-    //     // }
-    //     rotation += 90 - Math.round(ps / 2);
-    //     vis.transition()
-    //         .duration(6000)
-    //         .attrTween("transform", rotTween)
-    //         .each("end", function () {
-    //             //mark question as seen
-    //             d3.select(".slice:nth-child(" + (picked + 1) + ") path")
-    //             // .attr("fill", "grey");
-    //             oldrotation = rotation;
-
-    //             /* Get the result value from object "data" */
-    //             console.log(data[picked].label)
-
-    //             /* Comment the below line for restrict spin to sngle time */
-    //             innerCircle.on("click", spin);
-    //         });
-    // }
     const spin = () => {
         startAudio();
         var index = 10;
@@ -426,6 +303,15 @@ function Wheel() {
         rotation += Math.round(ps / 2);
 
         vis
+            .transition()
+            .duration(10000)
+            .attrTween("transform", rotTween)
+            .each("end", function () {
+                d3.select(".slice:nth-child(" + (picked + 1) + ") path");
+                console.log(data[picked].value);
+                oldrotation = rotation;
+            });
+        vis2
             .transition()
             .duration(10000)
             .attrTween("transform", rotTween)
