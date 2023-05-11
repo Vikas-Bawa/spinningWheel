@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from "react";
+/* global d3 */
+import { useEffect, useRef } from "react";
 import { data } from "../Constants";
 import applause from "../assets/applause.mp3";
 import centrePanel from "../assets/centrePanel.png";
@@ -10,6 +11,7 @@ import spinTxt from "../assets/spin.png";
 import square from "../assets/square.png";
 import wheel from "../assets/wheel.mp3";
 import "./style.css";
+
 function Wheel() {
   const onMountRef = useRef(true);
   var padding = { top: 10, right: 50, bottom: 10, left: 50 },
@@ -18,19 +20,17 @@ function Wheel() {
     r = Math.min(w, h) / 2,
     rotation = 0,
     oldrotation = 0,
-    picked = 100000,
-    oldpick = [],
-    color = d3.scale.category20(); //category20c()
+    picked = 100000;
+  // color = d3.scale.category20(); //category20c()
 
-  var container;
+  // var container;
   var vis;
-  var innerCircle;
+  // var innerCircle;
 
   const startAudio = () => {
     console.log("playing sound");
     new Audio(wheel).play();
     setTimeout(() => {
-      console.log("winner....");
       new Audio(applause).play();
     }, 6000);
   };
@@ -52,7 +52,7 @@ function Wheel() {
       .attr("x", 0)
       .attr("y", 0);
 
-    container = svg
+    var container = svg
       .append("g")
       .attr("class", "chartholder")
       .attr(
@@ -60,23 +60,23 @@ function Wheel() {
         "translate(" + (w / 2 + padding.left - 2) + "," + (h / 2 + padding.top + 12) + ")"
       );
     vis = container.append("g");
-    // var defs = svg.append("defs");
-    // const getGradient = (color) => {};
     const createGradient = (select) => {
-      console.log("select", select);
       return svg
         .append("radialGradient")
-        .attr("id", "svgGradient")
+        .attr("id", `svgGradient` + select)
         .attr("x1", "0%")
         .attr("x2", "0%")
         .attr("y1", "0%")
+        .attr("cx", "35%") //Move the x-center location towards the left
+        .attr("cy", "0%") //Move the y-center location towards the top
+        .attr("r", "60%")
         .attr("y2", "0%");
     };
 
     var pie = d3.layout
       .pie()
       .sort(null)
-      .value(function (d) {
+      .value(function () {
         return 1;
       });
     // declare an arc generator function
@@ -86,8 +86,7 @@ function Wheel() {
     arcs
       .append("path")
       .attr("fill", function (d, i) {
-        // let );
-        let gardient = createGradient();
+        let gardient = createGradient(i);
         gardient
           .append("stop")
           .attr("class", "start")
@@ -98,25 +97,21 @@ function Wheel() {
           .append("stop")
           .attr("class", "end")
           .attr("offset", "100%")
-          .attr("stop-color", function (i) {
-            return color(i);
+          .attr("stop-color", function () {
+            return d.data.color;
           })
           .attr("stop-opacity", 1);
-        console.log(color(i));
-        // return color(i);
       })
       .attr("d", function (d) {
         return arc(d);
       })
-      .attr("fill", "url(#svgGradient)")
-      .call(createGradient);
+      .attr("fill", function (d, i) {
+        return d.data.color;
+        // return "url(#svgGradient" + i + ")";
+      });
 
     var arc2 = d3.svg.arc().outerRadius(r).innerRadius(170);
-    // var arcs2 = vis.selectAll("g.slice")
-    //     .data(pie)
-    //     .enter()
-    //     .append("g")
-    //     .attr("class", "slice");
+
     arcs
       .append("path")
       .attr("fill", "rgba(0,0,0,0.1)")
@@ -135,11 +130,9 @@ function Wheel() {
       .attr("stroke-width", "0.5")
       .attr("stroke-dasharray", "2 2");
 
-    // .attr('stroke', 'grey')
-
     arcs
       .append("svg:image")
-      .attr("xlink:href", function (d, i) {
+      .attr("xlink:href", function () {
         return leftLine;
       })
       .attr("width", 8)
@@ -162,7 +155,7 @@ function Wheel() {
       });
     arcs
       .append("svg:image")
-      .attr("xlink:href", function (d, i) {
+      .attr("xlink:href", function () {
         return rightLine;
       })
       .attr("width", 8)
@@ -186,7 +179,7 @@ function Wheel() {
     // square image
     arcs
       .append("svg:image")
-      .attr("xlink:href", function (d, i) {
+      .attr("xlink:href", function () {
         return square;
       })
       .attr("width", 10)
@@ -207,36 +200,6 @@ function Wheel() {
           ")"
         );
       });
-    // .on("mouseover", function (d) {
-    //     d3.select(this.parentNode).transition()
-    //         .duration('500')
-    //         .attr("transform", function (d) {
-    //             return "scale(1.1)";
-    //         })
-    // }).on("mouseout", function (d) {
-    //     d3.select(this.parentNode).transition()
-    //         .duration('500')
-    //         .attr("transform", function (d) {
-    //             return "scale(1)";
-    //         })
-    // });
-
-    // NFT image
-    // arcs.append('svg:image')
-    //     .attr('xlink:href', function (d, i) {
-    //         return NFT;
-    //     })
-    //     .attr("width", 30)
-    //     .attr("height", 30)
-    //     .attr("x", -15)
-    //     .attr("y", 0)
-    //     .attr("transform", function (d) {
-    //         d.innerRadius = 0;
-    //         d.outerRadius = r;
-    //         d.angle = (d.startAngle + d.endAngle) / 2;
-    //         return "rotate(" + ((d.angle * 180) / Math.PI) + ")translate(" + (0) + ', ' + (-d.outerRadius + 50) + ")";
-    //     })
-    //     .attr("style", "opacity:0.5;")
 
     arcs
       .append("defs")
@@ -308,7 +271,7 @@ function Wheel() {
 
     //draw spin circle
 
-    innerCircle = container
+    container
       .append("circle")
       .attr("cx", 0)
       .attr("cy", 0)
@@ -332,14 +295,7 @@ function Wheel() {
       .attr("y", -40)
       .on("click", spin)
       .style({ cursor: "pointer" });
-
-    // container.append("text")
-    //     .attr("x", 0)
-    //     .attr("y", 12)
-    //     .attr("text-anchor", "middle")
-    //     .text("SPIN")
-    //     .style({ "font-weight": "bold", "font-size": "30px" });
-  }, []);
+  });
 
   const spin = () => {
     startAudio();
@@ -367,7 +323,7 @@ function Wheel() {
       });
   };
 
-  function rotTween(to) {
+  function rotTween() {
     var i = d3.interpolate(oldrotation % 360, rotation);
     return function (t) {
       return "rotate(" + i(t) + ")";
