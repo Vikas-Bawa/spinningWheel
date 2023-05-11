@@ -21,9 +21,7 @@ function Wheel() {
     rotation = 0,
     oldrotation = 0,
     picked = 100000;
-  // color = d3.scale.category20(); //category20c()
 
-  // var container;
   var vis;
 
   const startAudio = () => {
@@ -100,14 +98,14 @@ function Wheel() {
             return d.data.color;
           })
           .attr("stop-opacity", 1);
+        return "url(#svgGradient" + i + ")";
       })
       .attr("d", function (d) {
         return arc(d);
-      })
-      .attr("fill", function (d, i) {
-        // return d.data.color;
-        return "url(#svgGradient" + i + ")";
       });
+    // .attr("fill", function (d, i) {
+    //   // return d.data.color;
+    // });
 
     var arc2 = d3.svg.arc().outerRadius(r).innerRadius(170);
 
@@ -261,7 +259,7 @@ function Wheel() {
       .attr("xlink:href", pointer)
       .attr("width", 60)
       .attr("height", 80)
-      .attr("x", 219)
+      .attr("x", 228)
       .attr("y", 10);
 
     //draw spin circle
@@ -270,10 +268,66 @@ function Wheel() {
       .append("circle")
       .attr("cx", 0)
       .attr("cy", 0)
-      .attr("r", 60)
-      .style({ fill: "white", cursor: "pointer" });
+      .attr("r", 210)
+      .style({ fill: "url(#circularGradient)", cursor: "pointer" });
     //spin text
     // innerCircle.on("click", spin);
+    let circularGrad = container.append("radialGradient").attr("id", "circularGradient");
+    circularGrad
+      .append("stop")
+      .attr("class", "start")
+      .attr("offset", "0%")
+      .attr("stop-color", "black")
+      .attr("stop-opacity", 1);
+    circularGrad
+      .append("stop")
+      .attr("class", "start")
+      .attr("offset", "30%")
+      .attr("stop-color", "black")
+      .attr("stop-opacity", 0.2);
+    // circularGrad
+    //     .append("stop")
+    //     .attr("class", "start")
+    //     .attr("offset", "35%")
+    //     .attr("stop-color", 'black')
+    //     .attr("stop-opacity", 0.1);
+    circularGrad
+      .append("stop")
+      .attr("class", "start")
+      .attr("offset", "40%")
+      .attr("stop-color", "transparent")
+      .attr("stop-opacity", 0.7);
+    circularGrad
+      .append("stop")
+      .attr("class", "start")
+      .attr("offset", "45%")
+      .attr("stop-color", "transparent")
+      .attr("stop-opacity", 1);
+    circularGrad
+      .append("stop")
+      .attr("class", "start")
+      .attr("offset", "60%")
+      .attr("stop-color", "transparent")
+      .attr("stop-opacity", 0.7);
+    circularGrad
+      .append("stop")
+      .attr("class", "start")
+      .attr("offset", "70%")
+      .attr("stop-color", "transparent")
+      .attr("stop-opacity", 0.3);
+    circularGrad
+      .append("stop")
+      .attr("class", "start")
+      .attr("offset", "95%")
+      .attr("stop-color", "black")
+      .attr("stop-opacity", 0.3);
+    circularGrad
+      .append("stop")
+      .attr("class", "end")
+      .attr("offset", "100%")
+      .attr("stop-color", "black")
+      .attr("stop-opacity", 0.3);
+
     container
       .append("svg:image")
       .attr("xlink:href", centrePanel)
