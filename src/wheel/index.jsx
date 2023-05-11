@@ -91,14 +91,15 @@ function Wheel() {
         //     .attr("class", "slice");
         arcs.append("path")
             .attr("fill", function (d, i) {
-                let outerGradient = vis.append('radialGradient')
+                let outerGradient = container.append('radialGradient')
                     .attr('id', 'outerGrad')
+                    .attr('r', '80%')
                 outerGradient.append('stop')
                     .attr('offset', '0%')
-                    .attr('style', 'stop-color:transparent;stop-opacity:1')
+                    .attr('style', 'stop-color:rgba(0,0,0,0.4);stop-opacity:1')
                 outerGradient.append('stop')
                     .attr('offset', '100%')
-                    .attr('style', 'stop-color:rgba(0,0,0,0.4);stop-opacity:1')
+                    .attr('style', 'stop-color:transparent;stop-opacity:1')
 
                 return 'url(#outerGrad)';
             })
