@@ -198,6 +198,113 @@ import Square_00018 from '../assets/win/Common Win/WhiteSquare/Square_00018.png'
 
 
 
+
+import Spark_00001 from '../assets/Sparks/Spark_00001.png'
+import Spark_00002 from '../assets/Sparks/Spark_00002.png'
+import Spark_00003 from '../assets/Sparks/Spark_00003.png'
+import Spark_00004 from '../assets/Sparks/Spark_00004.png'
+import Spark_00005 from '../assets/Sparks/Spark_00005.png'
+import Spark_00006 from '../assets/Sparks/Spark_00006.png'
+import Spark_00007 from '../assets/Sparks/Spark_00007.png'
+import Spark_00008 from '../assets/Sparks/Spark_00008.png'
+import Spark_00009 from '../assets/Sparks/Spark_00009.png'
+import Spark_00010 from '../assets/Sparks/Spark_00010.png'
+import Spark_00011 from '../assets/Sparks/Spark_00011.png'
+import Spark_00012 from '../assets/Sparks/Spark_00012.png'
+import Spark_00013 from '../assets/Sparks/Spark_00013.png'
+import Spark_00014 from '../assets/Sparks/Spark_00014.png'
+import Spark_00015 from '../assets/Sparks/Spark_00015.png'
+import Spark_00016 from '../assets/Sparks/Spark_00016.png'
+import Spark_00017 from '../assets/Sparks/Spark_00017.png'
+import Spark_00018 from '../assets/Sparks/Spark_00018.png'
+import Spark_00019 from '../assets/Sparks/Spark_00019.png'
+import Spark_00020 from '../assets/Sparks/Spark_00020.png'
+import Spark_00021 from '../assets/Sparks/Spark_00021.png'
+import Spark_00022 from '../assets/Sparks/Spark_00022.png'
+import Spark_00023 from '../assets/Sparks/Spark_00023.png'
+import Spark_00024 from '../assets/Sparks/Spark_00024.png'
+import Spark_00025 from '../assets/Sparks/Spark_00025.png'
+import Spark_00026 from '../assets/Sparks/Spark_00026.png'
+import Spark_00027 from '../assets/Sparks/Spark_00027.png'
+import Spark_00028 from '../assets/Sparks/Spark_00028.png'
+import Spark_00029 from '../assets/Sparks/Spark_00029.png'
+import Spark_00030 from '../assets/Sparks/Spark_00030.png'
+import Spark_00031 from '../assets/Sparks/Spark_00031.png'
+import Spark_00032 from '../assets/Sparks/Spark_00032.png'
+import Spark_00033 from '../assets/Sparks/Spark_00033.png'
+import Spark_00034 from '../assets/Sparks/Spark_00034.png'
+import Spark_00035 from '../assets/Sparks/Spark_00035.png'
+import Spark_00036 from '../assets/Sparks/Spark_00036.png'
+import Spark_00037 from '../assets/Sparks/Spark_00037.png'
+import Spark_00038 from '../assets/Sparks/Spark_00038.png'
+import Spark_00039 from '../assets/Sparks/Spark_00039.png'
+import Spark_00040 from '../assets/Sparks/Spark_00040.png'
+import Spark_00041 from '../assets/Sparks/Spark_00041.png'
+import Spark_00042 from '../assets/Sparks/Spark_00042.png'
+import Spark_00043 from '../assets/Sparks/Spark_00043.png'
+import Spark_00044 from '../assets/Sparks/Spark_00044.png'
+import Spark_00045 from '../assets/Sparks/Spark_00045.png'
+import Spark_00046 from '../assets/Sparks/Spark_00046.png'
+import Spark_00047 from '../assets/Sparks/Spark_00047.png'
+import Spark_00048 from '../assets/Sparks/Spark_00048.png'
+import Spark_00049 from '../assets/Sparks/Spark_00049.png'
+import Spark_00050 from '../assets/Sparks/Spark_00050.png'
+import Spark_00051 from '../assets/Sparks/Spark_00051.png'
+import Spark_00052 from '../assets/Sparks/Spark_00052.png'
+import Spark_00053 from '../assets/Sparks/Spark_00053.png'
+import Spark_00054 from '../assets/Sparks/Spark_00054.png'
+import Spark_00055 from '../assets/Sparks/Spark_00055.png'
+import Spark_00056 from '../assets/Sparks/Spark_00056.png'
+import Spark_00057 from '../assets/Sparks/Spark_00057.png'
+import Spark_00058 from '../assets/Sparks/Spark_00058.png'
+import Spark_00059 from '../assets/Sparks/Spark_00059.png'
+import Spark_00060 from '../assets/Sparks/Spark_00060.png'
+import Spark_00061 from '../assets/Sparks/Spark_00061.png'
+import Spark_00062 from '../assets/Sparks/Spark_00062.png'
+import Spark_00063 from '../assets/Sparks/Spark_00063.png'
+import Spark_00064 from '../assets/Sparks/Spark_00064.png'
+import Spark_00065 from '../assets/Sparks/Spark_00065.png'
+import Spark_00066 from '../assets/Sparks/Spark_00066.png'
+import Spark_00067 from '../assets/Sparks/Spark_00067.png'
+import Spark_00068 from '../assets/Sparks/Spark_00068.png'
+import Spark_00069 from '../assets/Sparks/Spark_00069.png'
+import Spark_00070 from '../assets/Sparks/Spark_00070.png'
+import Spark_00071 from '../assets/Sparks/Spark_00071.png'
+import Spark_00072 from '../assets/Sparks/Spark_00072.png'
+import Spark_00073 from '../assets/Sparks/Spark_00073.png'
+import Spark_00074 from '../assets/Sparks/Spark_00074.png'
+import Spark_00075 from '../assets/Sparks/Spark_00075.png'
+import Spark_00076 from '../assets/Sparks/Spark_00076.png'
+import Spark_00077 from '../assets/Sparks/Spark_00077.png'
+import Spark_00078 from '../assets/Sparks/Spark_00078.png'
+import Spark_00079 from '../assets/Sparks/Spark_00079.png'
+import Spark_00080 from '../assets/Sparks/Spark_00080.png'
+import Spark_00081 from '../assets/Sparks/Spark_00081.png'
+import Spark_00082 from '../assets/Sparks/Spark_00082.png'
+import Spark_00083 from '../assets/Sparks/Spark_00083.png'
+import Spark_00084 from '../assets/Sparks/Spark_00084.png'
+import Spark_00085 from '../assets/Sparks/Spark_00085.png'
+import Spark_00086 from '../assets/Sparks/Spark_00086.png'
+import Spark_00087 from '../assets/Sparks/Spark_00087.png'
+import Spark_00088 from '../assets/Sparks/Spark_00088.png'
+import Spark_00089 from '../assets/Sparks/Spark_00089.png'
+import Spark_00090 from '../assets/Sparks/Spark_00090.png'
+import Spark_00091 from '../assets/Sparks/Spark_00091.png'
+import Spark_00092 from '../assets/Sparks/Spark_00092.png'
+import Spark_00093 from '../assets/Sparks/Spark_00093.png'
+import Spark_00094 from '../assets/Sparks/Spark_00094.png'
+import Spark_00095 from '../assets/Sparks/Spark_00095.png'
+import Spark_00096 from '../assets/Sparks/Spark_00096.png'
+import Spark_00097 from '../assets/Sparks/Spark_00097.png'
+import Spark_00098 from '../assets/Sparks/Spark_00098.png'
+import Spark_00099 from '../assets/Sparks/Spark_00099.png'
+import Spark_00100 from '../assets/Sparks/Spark_00100.png'
+import Spark_00101 from '../assets/Sparks/Spark_00101.png'
+import Spark_00102 from '../assets/Sparks/Spark_00102.png'
+import Spark_00103 from '../assets/Sparks/Spark_00103.png'
+import Spark_00104 from '../assets/Sparks/Spark_00104.png'
+import Spark_00105 from '../assets/Sparks/Spark_00105.png'
+
 export const CommonGlitter = [
     Common_00000,
     Common_00001,
@@ -394,4 +501,112 @@ export const Common_NFT_Border = [
     Square_00016,
     Square_00017,
     Square_00018,
+]
+
+export const Sparks = [
+    Spark_00060,
+    Spark_00071,
+    Spark_00055,
+    Spark_00079,
+    Spark_00104,
+    Spark_00031,
+    Spark_00011,
+    Spark_00075,
+    Spark_00015,
+    Spark_00033,
+    Spark_00025,
+    Spark_00001,
+    Spark_00058,
+    Spark_00073,
+    Spark_00034,
+    Spark_00039,
+    Spark_00083,
+    Spark_00082,
+    Spark_00018,
+    Spark_00042,
+    Spark_00063,
+    Spark_00036,
+    Spark_00030,
+    Spark_00017,
+    Spark_00097,
+    Spark_00041,
+    Spark_00021,
+    Spark_00045,
+    Spark_00049,
+    Spark_00047,
+    Spark_00048,
+    Spark_00005,
+    Spark_00035,
+    Spark_00044,
+    Spark_00007,
+    Spark_00028,
+    Spark_00084,
+    Spark_00099,
+    Spark_00002,
+    Spark_00027,
+    Spark_00096,
+    Spark_00054,
+    Spark_00051,
+    Spark_00087,
+    Spark_00095,
+    Spark_00012,
+    Spark_00010,
+    Spark_00037,
+    Spark_00077,
+    Spark_00100,
+    Spark_00038,
+    Spark_00023,
+    Spark_00098,
+    Spark_00003,
+    Spark_00008,
+    Spark_00057,
+    Spark_00006,
+    Spark_00062,
+    Spark_00052,
+    Spark_00093,
+    Spark_00065,
+    Spark_00090,
+    Spark_00009,
+    Spark_00089,
+    Spark_00068,
+    Spark_00043,
+    Spark_00024,
+    Spark_00014,
+    Spark_00016,
+    Spark_00004,
+    Spark_00064,
+    Spark_00078,
+    Spark_00069,
+    Spark_00013,
+    Spark_00032,
+    Spark_00085,
+    Spark_00088,
+    Spark_00072,
+    Spark_00074,
+    Spark_00066,
+    Spark_00050,
+    Spark_00092,
+    Spark_00103,
+    Spark_00019,
+    Spark_00022,
+    Spark_00029,
+    Spark_00053,
+    Spark_00105,
+    Spark_00061,
+    Spark_00094,
+    Spark_00067,
+    Spark_00020,
+    Spark_00040,
+    Spark_00056,
+    Spark_00070,
+    Spark_00102,
+    Spark_00091,
+    Spark_00081,
+    Spark_00026,
+    Spark_00059,
+    Spark_00046,
+    Spark_00086,
+    Spark_00076,
+    Spark_00101,
+    Spark_00080
 ]
