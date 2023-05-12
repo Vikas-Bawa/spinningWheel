@@ -1,5 +1,5 @@
 /* global d3 */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { data } from "../Constants";
 import applause from "../assets/applause.mp3";
 import centrePanel from "../assets/centrePanel.png";
@@ -10,8 +10,9 @@ import rightLine from "../assets/rightLine.png";
 import spinTxt from "../assets/spin.png";
 import square from "../assets/square.png";
 import wheel from "../assets/wheel.mp3";
-import "./style.css";
+// import frame3 from "../assets/spark/Spark_00007.png";
 
+import "./style.css";
 function Wheel() {
   const onMountRef = useRef(true);
   var padding = { top: 10, right: 50, bottom: 10, left: 50 },
@@ -32,7 +33,31 @@ function Wheel() {
       new Audio(applause).play();
     }, 6000);
   };
+  const [animationFrames, setAnimationFrames] = useState([]);
+  useEffect(() => {
+    // Dynamically import animation frames
+    const importFrames = async () => {
+      const frames = [];
+      for (let i = 7; i < 100; i++) {
+        const frame = await importFrame(`../assets/spark/Spark_00007.png`);
+        frames.push(frame.default);
+      }
+      setAnimationFrames(frames);
+    };
 
+    importFrames();
+  }, []);
+
+  const importFrame = async (path) => {
+    try {
+      const module = await import(/* @vite-ignore */ path);
+      return module.default;
+    } catch (error) {
+      console.error(`Failed to import frame: ${path}`, error);
+    }
+  };
+
+  console.log("Aniamtion frames", animationFrames);
   useEffect(() => {
     if (!onMountRef.current) return;
     onMountRef.current = false;
@@ -361,15 +386,18 @@ function Wheel() {
     rotation = Math.round(rng / ps) * ps;
     picked = Math.round(data.length - (rotation % 360) / ps);
     picked = picked >= data.length ? picked % data.length : picked;
-
+    maxAngle = 0;
     rotation += Math.round(ps / 2);
+
     isRotating = true;
-    var easing = "linear"; // Easing function for the transition
-    rotatePin();
+    console.log("Rotation ", rotation);
+    console.log("oldRotation ", oldrotation);
+
+    // rotatePin();
     vis
       .transition()
       .duration(6000)
-      .ease(easing)
+      // .ease("bouncein")
       .attrTween("transform", rotTween)
       .each("end", function () {
         d3.select(".slice:nth-child(" + (picked + 1) + ") path");
@@ -381,24 +409,58 @@ function Wheel() {
       });
   };
 
+  function calculatePercentage(part, total) {
+    // console.log("Part totoal", part, total);
+    return (part / total) * 100;
+  }
+  // currentRotation = 0;
   function rotTween() {
     var i = d3.interpolate(oldrotation % 360, rotation);
-    // var rotationAngle = -45; // Angle in degrees
-    // updateRotationAngle(rotationAngle);
+    rotatePin(0);
     return function (t) {
       var currentRotation = i(t);
-
+      rotatePin(currentRotation);
       return "rotate(" + -currentRotation + ")";
     };
   }
   var angle = 0; // Initial angle
-  var maxAngle = 45; // Maximum angle to rotate
+  var maxAngle = 0; // Maximum angle to rotate
   var isRotating = true; // Flag to indicate if rotation should continue
 
-  function rotatePin() {
+  function rotatePin(progess) {
     var duration = 100; // Duration of the transition in milliseconds
     var easing = "linear"; // Easing function for the transition
 
+    let toBeMoved = 0;
+    if (progess) {
+      let percentageCompleted = calculatePercentage(Math.round(progess), Math.round(rotation));
+
+      if (percentageCompleted < 3) {
+        toBeMoved = 5;
+      } else if (percentageCompleted < 10) {
+        toBeMoved = 10;
+      } else if (percentageCompleted < 20) {
+        toBeMoved = 20;
+      } else if (percentageCompleted < 30) {
+        toBeMoved = 30;
+      } else if (percentageCompleted > 30 && percentageCompleted < 80) {
+        toBeMoved = 45;
+      } else if (percentageCompleted < 90) {
+        toBeMoved = 20;
+      } else if (percentageCompleted < 95) {
+        toBeMoved = 10;
+      } else if (percentageCompleted > 95) {
+        toBeMoved = 3;
+      }
+      if (toBeMoved == maxAngle) {
+        return;
+      }
+
+      maxAngle = toBeMoved;
+    }
+
+    // maxAngle = toBeMoved ? toBeMoved : maxAngle;
+    console.log("MAx angle", maxAngle);
     // Rotate the pin to the maximum angle
     pinGroup
       .transition()
@@ -406,18 +468,13 @@ function Wheel() {
       .ease(easing)
       .attr("transform", "translate(-0, -240) rotate(" + maxAngle + ")")
       .each("end", function () {
-        // Reverse the rotation back to 0
-        let rotation = isRotating ? 20 : 0;
-        let time = isRotating ? duration : duration + 100;
         pinGroup
           .transition()
-          .duration(time)
+          .duration(duration)
           .ease(easing)
-          .attr("transform", "translate(-0, -240) rotate(" + rotation + ")")
+          .attr("transform", "translate(-0, -240) rotate(0)")
           .each("end", function () {
-            // Recursively rotate the pin if necessary
             if (angle > maxAngle && isRotating) {
-              // console.log("Angle", angle);
               rotatePin();
             }
           });
