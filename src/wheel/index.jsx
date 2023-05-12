@@ -1,5 +1,5 @@
 /* global d3 */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { data } from "../Constants";
 import applause from "../assets/applause.mp3";
 import centrePanel from "../assets/centrePanel.png";
@@ -33,31 +33,7 @@ function Wheel() {
       new Audio(applause).play();
     }, 6000);
   };
-  const [animationFrames, setAnimationFrames] = useState([]);
-  useEffect(() => {
-    // Dynamically import animation frames
-    const importFrames = async () => {
-      const frames = [];
-      for (let i = 7; i < 100; i++) {
-        const frame = await importFrame(`../assets/spark/Spark_00007.png`);
-        frames.push(frame.default);
-      }
-      setAnimationFrames(frames);
-    };
 
-    importFrames();
-  }, []);
-
-  const importFrame = async (path) => {
-    try {
-      const module = await import(/* @vite-ignore */ path);
-      return module.default;
-    } catch (error) {
-      console.error(`Failed to import frame: ${path}`, error);
-    }
-  };
-
-  console.log("Aniamtion frames", animationFrames);
   useEffect(() => {
     if (!onMountRef.current) return;
     onMountRef.current = false;
@@ -105,6 +81,34 @@ function Wheel() {
     // declare an arc generator function
     var arc = d3.svg.arc().outerRadius(r).innerRadius(0);
     var arcs = vis.selectAll("g.slice").data(pie).enter().append("g").attr("class", "slice");
+    // Create the filter for the inner shadow
+    var filter = vis
+      .append("svg:defs")
+      .append("svg:filter")
+      .attr("id", "pathShadowFilter")
+      .attr("x", "-50%")
+      .attr("y", "-50%")
+      .attr("width", "200%")
+      .attr("height", "200%");
+
+    filter
+      .append("svg:feGaussianBlur")
+      .attr("in", "SourceAlpha")
+      .attr("stdDeviation", 2) // Adjust the standard deviation as needed for the desired blur effect
+      .attr("result", "blur");
+
+    filter
+      .append("svg:feOffset")
+      .attr("in", "blur")
+      .attr("dx", 1) // Adjust the offset as needed for the desired shadow effect
+      .attr("dy", 1) // Adjust the offset as needed for the desired shadow effect
+      .attr("result", "offsetBlur");
+
+    filter
+      .append("svg:feComposite")
+      .attr("in", "SourceGraphic")
+      .attr("in2", "offsetBlur")
+      .attr("operator", "over");
 
     arcs
       .append("path")
@@ -124,11 +128,29 @@ function Wheel() {
             return d.data.color;
           })
           .attr("stop-opacity", 1);
-        return "url(#svgGradient" + i + ")";
+        // return "url(#svgGradient" + i + ")";
+        return d.data.color;
       })
+      .style("filter", "url(#pathShadowFilter)")
       .attr("d", function (d) {
         return arc(d);
       });
+
+    // const innerShadowPath = arcs
+    //   .append("path")
+    //   .attr("d", function (d) {
+    //     return arc(d);
+    //   })
+    //   .attr("fill", function (d, i) {
+    //     console.log("D for shadow", d);
+    //     let color = d.data.shadow ? d.data.shadow : "#54E0EB";
+    //     console.log("Color", color);
+    //     return color;
+    //   });
+    // innerShadowPath.attr("transform", "translate(4, 4)");
+
+    // Adjust the opacity of the inner shadow
+    // innerShadowPath.style("opacity", 0.5);
 
     var arc2 = d3.svg.arc().outerRadius(r).innerRadius(170);
     var arc3 = d3.svg.arc().outerRadius(170).innerRadius(170);
