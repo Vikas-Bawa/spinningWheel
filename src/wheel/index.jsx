@@ -13,7 +13,8 @@ import rightLine from "../assets/rightLine.png";
 import spinTxt from "../assets/spin.png";
 import square from "../assets/square.png";
 import wheel from "../assets/wheel.mp3";
-import './style.css';
+import "./style.css";
+
 function Wheel() {
     const onMountRef = useRef(true);
     var padding = { top: 30, right: 50, bottom: 10, left: 50 },
@@ -29,6 +30,7 @@ function Wheel() {
     var vis;
     var innerCircle;
     var pointerImg;
+    var spinText;
     var lights;
     var winNFT;
     var winEffect;
@@ -43,7 +45,8 @@ function Wheel() {
     useEffect(() => {
         if (!onMountRef.current) return;
         onMountRef.current = false;
-        var svg = d3.select('#chart')
+        var svg = d3
+            .select("#chart")
             .append("svg")
             .data([data])
             .attr("width", w + padding.left + padding.right)
@@ -56,8 +59,23 @@ function Wheel() {
             .attr("y", 10)
         container = svg.append("g")
             .attr("class", "chartholder")
-            .attr("transform", "translate(" + (w / 2 + padding.left - 2) + "," + (h / 2 + padding.top + 12) + ")");
+            .attr(
+                "transform",
+                "translate(" + (w / 2 + padding.left - 2) + "," + (h / 2 + padding.top + 12) + ")"
+            );
         vis = container.append("g");
+        // const createGradient = (select) => {
+        //     return svg
+        //         .append("radialGradient")
+        //         .attr("id", `svgGradient` + select)
+        //         .attr("x1", "0%")
+        //         .attr("x2", "0%")
+        //         .attr("y1", "0%")
+        //         .attr("cx", "35%") //Move the x-center location towards the left
+        //         .attr("cy", "0%") //Move the y-center location towards the top
+        //         .attr("r", "60%")
+        //         .attr("y2", "0%");
+        // };
         var pie = d3.layout.pie().sort(null).value(function (d) { return 1; });
         // declare an arc generator function
         var arc = d3.svg.arc()
@@ -74,6 +92,28 @@ function Wheel() {
             //     return "url(#wedgeImg" + (i + 1) + ")";
             // })
             .attr("d", function (d) { return arc(d); })
+
+        // arcs
+        // .append("path")
+        // .attr("fill", function (d, i) {
+        //     let gardient = createGradient(i);
+        //     gardient
+        //         .append("stop")
+        //         .attr("class", "start")
+        //         .attr("offset", "0%")
+        //         .attr("stop-color", "#ffffff")
+        //         .attr("stop-opacity", 1);
+        //     gardient
+        //         .append("stop")
+        //         .attr("class", "end")
+        //         .attr("offset", "100%")
+        //         .attr("stop-color", function () {
+        //             return d.data.color;
+        //         })
+        //         .attr("stop-opacity", 1);
+        //     return "url(#svgGradient" + i + ")";
+
+
         // .on("mouseover", function (d) {
         //     d3.select(this.parentNode).transition()
         //         .duration('500')
@@ -219,9 +259,28 @@ function Wheel() {
                 d.angle = (d.startAngle + d.endAngle) / 2;
                 return "rotate(" + (d.angle * 180 / Math.PI) + ")translate(" + (0) + ', ' + (-(d.outerRadius - 15)) + ")";
             })
-            .attr("text-anchor", "middle")
-            .text(function (d, i) {
-                return data[i].label;
+            .attr("d", function (d) {
+                return arc(d);
+            });
+        // .attr("fill", function (d, i) {
+        //   // return d.data.color;
+        // });
+
+        var arc2 = d3.svg.arc().outerRadius(r).innerRadius(170);
+
+        arcs
+            .append("path")
+            .attr("fill", "rgba(0,0,0,0.1)")
+            .attr("d", function (d) {
+                return arc2(d);
+            });
+
+        var arc3 = d3.svg.arc().outerRadius(170).innerRadius(170);
+        arcs
+            .append("path")
+            .attr("fill", "rgba(0,0,0,1)")
+            .attr("d", function (d) {
+                return arc3(d);
             })
             .style({ "font-size": "0.7em", "font-weight": "700", 'fill': 'white' })
         arcs.append("text")
@@ -282,7 +341,6 @@ function Wheel() {
             .attr("r", 210)
             .style({ fill: "url(#circularGradient)", cursor: "pointer" });
         //spin text
-        // innerCircle.on("click", spin);
         let circularGrad = container.append("radialGradient").attr("id", "circularGradient");
         circularGrad
             .append("stop")
@@ -309,18 +367,19 @@ function Wheel() {
             .attr("stop-color", "transparent")
             .attr("stop-opacity", 1);
 
-
-        container.append('svg:image')
-            .attr('xlink:href', centrePanel)
+        container
+            .append("svg:image")
+            .attr("xlink:href", centrePanel)
             .attr("width", 122)
             .attr("height", 122)
             .attr("x", -61)
-            .attr("y", -61)
-        container.append('svg:image')
-            .attr('xlink:href', spinTxt)
-            .attr("width", 120)
+            .attr("y", -61);
+        spinText = container
+            .append("svg:image")
+            .attr("xlink:href", spinTxt)
+            .attr("width", 100)
             .attr("height", 60)
-            .attr("x", -60)
+            .attr("x", -50)
             .attr("y", -40)
             .on("click", spin)
             .style({ "cursor": "pointer" });
@@ -343,12 +402,12 @@ function Wheel() {
 
     const spin = () => {
         startAudio();
-        innerCircle.on("click", null);
-        var index = 15;
-
+        spinText.on("click", null);
+        var index = 3;
         var ps = 360 / data.length;
+
         var slectedIndex = (data.length - index) * ps;
-        var rng = Math.floor(1 * slectedIndex + 360 * 10);
+        var rng = Math.floor(1 * slectedIndex + 360 * 5);
 
         rotation = Math.round(rng / ps) * ps;
         picked = Math.round(data.length - (rotation % 360) / ps);
@@ -411,12 +470,26 @@ function Wheel() {
 
                 /* Comment the below line for restrict spin to sngle time */
                 // innerCircle.on("click", spin);
+                spinText.on("click", spin);
             });
+        function tween(d, i, a) {
+            return d3.interpolateString("rotate(-60, 150, 130)  translate(-25px, 87px);", "rotate(-20) translate(-27px, 87px);");
+        }
+        turnNeedle();
+        function turnNeedle() {
+
+            pointerImg
+                .transition()
+                .duration(2000)
+                .attrTween("transform", tween);
+
+
+        }
 
     }
 
 
-    function rotTween(to) {
+    function rotTween() {
         var i = d3.interpolate(oldrotation % 360, rotation);
         return function (t) {
             return "rotate(" + i(t) + ")";
@@ -426,6 +499,6 @@ function Wheel() {
         <>
             <div id="chart"></div>
         </>
-    )
+    );
 }
 export default Wheel
