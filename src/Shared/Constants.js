@@ -1,19 +1,17 @@
-import commonWedge1 from "./assets/wedges/fortune1.png";
-import commonWedge10 from "./assets/wedges/fortune10.png";
-import commonWedge11 from "./assets/wedges/fortune11.png";
-import commonWedge12 from "./assets/wedges/fortune12.png";
-import commonWedge13 from "./assets/wedges/fortune13.png";
-import commonWedge14 from "./assets/wedges/fortune14.png";
-import commonWedge2 from "./assets/wedges/fortune2.png";
-import commonWedge3 from "./assets/wedges/fortune3.png";
-import commonWedge4 from "./assets/wedges/fortune4.png";
-import commonWedge5 from "./assets/wedges/fortune5.png";
-import commonWedge6 from "./assets/wedges/fortune6.png";
-import commonWedge7 from "./assets/wedges/fortune7.png";
-import commonWedge8 from "./assets/wedges/fortune8.png";
-import commonWedge9 from "./assets/wedges/fortune9.png";
-
-
+import commonWedge1 from "../assets/wedges/fortune1.png";
+import commonWedge10 from "../assets/wedges/fortune10.png";
+import commonWedge11 from "../assets/wedges/fortune11.png";
+import commonWedge12 from "../assets/wedges/fortune12.png";
+import commonWedge13 from "../assets/wedges/fortune13.png";
+import commonWedge14 from "../assets/wedges/fortune14.png";
+import commonWedge2 from "../assets/wedges/fortune2.png";
+import commonWedge3 from "../assets/wedges/fortune3.png";
+import commonWedge4 from "../assets/wedges/fortune4.png";
+import commonWedge5 from "../assets/wedges/fortune5.png";
+import commonWedge6 from "../assets/wedges/fortune6.png";
+import commonWedge7 from "../assets/wedges/fortune7.png";
+import commonWedge8 from "../assets/wedges/fortune8.png";
+import commonWedge9 from "../assets/wedges/fortune9.png";
 
 
 export const data = [

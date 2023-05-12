@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
-import { data } from '../Constants';
+import { data } from '../Shared/Constants';
+import { CommonGlitter, Common_NFT_Border } from '../Shared/Images';
 import wonNFT from "../assets/NFTs/SMB Epic 466.png";
 import applause from "../assets/applause.mp3";
 import centrePanel from "../assets/centrePanel.png";
@@ -30,6 +31,9 @@ function Wheel() {
     var pointerImg;
     var lights;
     var winNFT;
+    var winEffect;
+    let NFT_BorderEffect;
+    let c = 0;
     const startAudio = () => {
         new Audio(wheel).play();
         setTimeout(() => {
@@ -123,9 +127,7 @@ function Wheel() {
             .attr('stroke-dasharray', '2 2')
         // .attr('stroke', 'grey')
         arcs.append('svg:image')
-            .attr('xlink:href', function (d, i) {
-                return leftLine;
-            })
+            .attr('xlink:href', leftLine)
             .attr("width", 8)
             .attr("height", 210)
             .attr("x", -2.5)
@@ -137,9 +139,7 @@ function Wheel() {
                 return "rotate(" + ((d.startAngle * 180) / Math.PI) + ")translate(" + (0) + ', ' + (-d.outerRadius - 8) + ")";
             })
         arcs.append('svg:image')
-            .attr('xlink:href', function (d, i) {
-                return rightLine;
-            })
+            .attr('xlink:href', rightLine)
             .attr("width", 8)
             .attr("height", 210)
             .attr("x", -6)
@@ -152,9 +152,7 @@ function Wheel() {
             });
         // square image
         arcs.append('svg:image')
-            .attr('xlink:href', function (d, i) {
-                return square;
-            })
+            .attr('xlink:href', square)
             .attr("width", 10)
             .attr("height", 10)
             .attr("x", -5)
@@ -207,7 +205,7 @@ function Wheel() {
         //     })
         //     .attr("style", "opacity:0.5;")
         arcs.append("defs")
-            .append("radialGradient")
+            .attr('id', 'unknown')
             .attr('id', function (d, i) { return 'grad' + (i + 1) })
             .attr('cx', '0%')
             .attr('cy', '0%')
@@ -310,8 +308,8 @@ function Wheel() {
             .attr("offset", "45%")
             .attr("stop-color", "transparent")
             .attr("stop-opacity", 1);
-        //spin text
-        // innerCircle.on("click", spin);
+
+
         container.append('svg:image')
             .attr('xlink:href', centrePanel)
             .attr("width", 122)
@@ -326,6 +324,8 @@ function Wheel() {
             .attr("y", -40)
             .on("click", spin)
             .style({ "cursor": "pointer" });
+
+
         // winNFT = container.append('svg:image')
         //     .attr('xlink:href', wonNFT)
         //     .attr("width", 200)
@@ -378,8 +378,39 @@ function Wheel() {
                     .attr("x", -100)
                     .attr("y", -140)
 
+                winEffect = container.append('svg:image')
+                    .attr('id', 'glitter')
+                    .attr("x", -250)
+                    .attr("y", -350)
+                    .attr("width", 500)
+                    .attr("height", 500)
+                    .attr("xlink:href", CommonGlitter[0])
+                NFT_BorderEffect = container.append('svg:image')
+                    .attr('id', 'NFT_Border')
+                    .attr("x", -125)
+                    .attr("y", -165)
+                    .attr("width", 250)
+                    .attr("height", 250)
+                    .attr('xlink:href', Common_NFT_Border[0])
+                let idx = 0;
+                let shining;
+                setTimeout(() => {
+                    shining = setInterval(() => {
+                        idx += 1;
+                        if (idx < CommonGlitter.length)
+                            winEffect.attr('xlink:href', CommonGlitter[idx])
+                        if (idx < Common_NFT_Border.length)
+                            NFT_BorderEffect.attr('xlink:href', Common_NFT_Border[idx])
+                        // console.log('idx...', idx)
+                    }, 10);
+
+                }, 1000);
+                setTimeout(() => {
+                    clearInterval(shining);
+                }, 5000);
+
                 /* Comment the below line for restrict spin to sngle time */
-                innerCircle.on("click", spin);
+                // innerCircle.on("click", spin);
             });
 
     }
