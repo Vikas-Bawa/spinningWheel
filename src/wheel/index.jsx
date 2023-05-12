@@ -23,6 +23,7 @@ function Wheel() {
     picked = 100000;
 
   var vis;
+  let pinGroup;
 
   const startAudio = () => {
     console.log("playing sound");
@@ -103,20 +104,32 @@ function Wheel() {
       .attr("d", function (d) {
         return arc(d);
       });
-    // .attr("fill", function (d, i) {
-    //   // return d.data.color;
-    // });
 
     var arc2 = d3.svg.arc().outerRadius(r).innerRadius(170);
+    var arc3 = d3.svg.arc().outerRadius(170).innerRadius(170);
 
     arcs
       .append("path")
-      .attr("fill", "rgba(0,0,0,0.1)")
       .attr("d", function (d) {
         return arc2(d);
+      })
+      .attr("fill", function () {
+        let outerGradient = container
+          .append("radialGradient")
+          .attr("id", "outerGrad")
+          .attr("r", "90%");
+        outerGradient
+          .append("stop")
+          .attr("offset", "0%")
+          .attr("style", "stop-color:rgba(0,0,0,0.4);stop-opacity:1");
+        outerGradient
+          .append("stop")
+          .attr("offset", "100%")
+          .attr("style", "stop-color:transparent;stop-opacity:1");
+
+        return "url(#outerGrad)";
       });
 
-    var arc3 = d3.svg.arc().outerRadius(170).innerRadius(170);
     arcs
       .append("path")
       .attr("fill", "rgba(0,0,0,1)")
@@ -254,24 +267,42 @@ function Wheel() {
       .style({ "font-size": "0.7em", "font-weight": "700", fill: "rgba(0,0,0,0.5)" });
 
     //make pointer
-    svg
-      .append("svg:image")
-      .attr("xlink:href", pointer)
-      .attr("width", 60)
-      .attr("height", 80)
-      .attr("x", 228)
-      .attr("y", 10);
+    pinGroup = container
+      .append("g")
+      .attr("x", 0) // Adjust the x-coordinate to align the bottom of the image with the rotation pivot
+      .attr("y", 0)
+      .attr("class", "pin-group")
+      .attr("transform", "translate(0, -240)"); // Set the initial position of the pin
 
+    // Add the pin image to the group
+
+    pinGroup
+      .append("image")
+      .attr("xlink:href", pointer) // URL of the pin image
+      .attr("width", 60) // Pin width
+      .attr("height", 80) // Pin height
+      .attr("x", -30) // Adjust the x-coordinate to align the bottom of the image with the rotation pivot
+      .attr("y", -25) // Set the y-coordinate to 0, as the position is controlled by the group transform
+      .style("transform-origin", "center top") // Set the transform origin to the bottom center of the image
+      .style("transform-box", "fill-box") // Set the transform box to fill-box for proper rotation
+      .attr("transform", "rotate(0)"); // Set the initial rotation angle
+    pinGroup
+      .append("circle")
+      .attr("cx", 0.5) // Set the x-coordinate of the rotation pivot
+      .attr("cy", 1) // Set the y-coordinate of the rotation pivot
+      .attr("x", 0) // Adjust the x-coordinate to align the bottom of the image with the rotation pivot
+      .attr("y", 0) //
+      .style("transform-origin", "center") // Set the transform origin to the bottom center of the image
+      .attr("r", 20) // Set the radius of the rotation pivot (0 to make it invisible)
+      .attr("fill", "rgba(0,0,0,0)");
     //draw spin circle
-
     container
       .append("circle")
       .attr("cx", 0)
       .attr("cy", 0)
       .attr("r", 210)
       .style({ fill: "url(#circularGradient)", cursor: "pointer" });
-    //spin text
-    // innerCircle.on("click", spin);
+
     let circularGrad = container.append("radialGradient").attr("id", "circularGradient");
     circularGrad
       .append("stop")
@@ -284,49 +315,20 @@ function Wheel() {
       .attr("class", "start")
       .attr("offset", "30%")
       .attr("stop-color", "black")
-      .attr("stop-opacity", 0.2);
-    // circularGrad
-    //     .append("stop")
-    //     .attr("class", "start")
-    //     .attr("offset", "35%")
-    //     .attr("stop-color", 'black')
-    //     .attr("stop-opacity", 0.1);
+      .attr("stop-opacity", 0.4);
+
     circularGrad
       .append("stop")
       .attr("class", "start")
       .attr("offset", "40%")
       .attr("stop-color", "transparent")
-      .attr("stop-opacity", 0.7);
+      .attr("stop-opacity", 0.3);
     circularGrad
       .append("stop")
       .attr("class", "start")
-      .attr("offset", "45%")
+      .attr("offset", "50%")
       .attr("stop-color", "transparent")
-      .attr("stop-opacity", 1);
-    // circularGrad
-    //   .append("stop")
-    //   .attr("class", "start")
-    //   .attr("offset", "60%")
-    //   .attr("stop-color", "transparent")
-    //   .attr("stop-opacity", 0.7);
-    // circularGrad
-    //   .append("stop")
-    //   .attr("class", "start")
-    //   .attr("offset", "70%")
-    //   .attr("stop-color", "transparent")
-    //   .attr("stop-opacity", 0.3);
-    // circularGrad
-    //   .append("stop")
-    //   .attr("class", "start")
-    //   .attr("offset", "95%")
-    //   .attr("stop-color", "black")
-    //   .attr("stop-opacity", 0.3);
-    // circularGrad
-    //   .append("stop")
-    //   .attr("class", "end")
-    //   .attr("offset", "100%")
-    //   .attr("stop-color", "black")
-    //   .attr("stop-opacity", 0.3);
+      .attr("stop-opacity", 0.2);
 
     container
       .append("svg:image")
@@ -345,40 +347,85 @@ function Wheel() {
       .on("click", spin)
       .style({ cursor: "pointer" });
   });
+  let currnetIndex = 0;
 
+  //Trigger to spin the wheel
   const spin = () => {
     startAudio();
-    var index = 3;
 
     var ps = 360 / data.length;
 
-    var slectedIndex = (data.length - index) * ps;
-    var rng = Math.floor(1 * slectedIndex + 360);
+    var slectedIndex = (data.length - currnetIndex) * ps;
+    var rng = Math.floor(5 * slectedIndex + 360);
 
     rotation = Math.round(rng / ps) * ps;
     picked = Math.round(data.length - (rotation % 360) / ps);
     picked = picked >= data.length ? picked % data.length : picked;
 
     rotation += Math.round(ps / 2);
-
+    isRotating = true;
+    var easing = "linear"; // Easing function for the transition
+    rotatePin();
     vis
       .transition()
       .duration(6000)
+      .ease(easing)
       .attrTween("transform", rotTween)
       .each("end", function () {
         d3.select(".slice:nth-child(" + (picked + 1) + ") path");
         console.log(data[picked].value);
         oldrotation = rotation;
+        isRotating = false;
+        // updateRotationAngle(0);
+        ++currnetIndex;
       });
   };
 
   function rotTween() {
     var i = d3.interpolate(oldrotation % 360, rotation);
+    // var rotationAngle = -45; // Angle in degrees
+    // updateRotationAngle(rotationAngle);
     return function (t) {
-      return "rotate(" + i(t) + ")";
+      var currentRotation = i(t);
+
+      return "rotate(" + -currentRotation + ")";
     };
   }
+  var angle = 0; // Initial angle
+  var maxAngle = 45; // Maximum angle to rotate
+  var isRotating = true; // Flag to indicate if rotation should continue
 
+  function rotatePin() {
+    var duration = 100; // Duration of the transition in milliseconds
+    var easing = "linear"; // Easing function for the transition
+
+    // Rotate the pin to the maximum angle
+    pinGroup
+      .transition()
+      .duration(duration)
+      .ease(easing)
+      .attr("transform", "translate(-0, -240) rotate(" + maxAngle + ")")
+      .each("end", function () {
+        // Reverse the rotation back to 0
+        let rotation = isRotating ? 20 : 0;
+        let time = isRotating ? duration : duration + 100;
+        pinGroup
+          .transition()
+          .duration(time)
+          .ease(easing)
+          .attr("transform", "translate(-0, -240) rotate(" + rotation + ")")
+          .each("end", function () {
+            // Recursively rotate the pin if necessary
+            if (angle > maxAngle && isRotating) {
+              // console.log("Angle", angle);
+              rotatePin();
+            }
+          });
+      });
+
+    // Update the rotation angle
+    angle += 90; // Change this value to adjust the rotation increment
+  }
   return (
     <>
       <div id="chart"></div>
