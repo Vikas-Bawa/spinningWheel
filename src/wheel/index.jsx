@@ -30,12 +30,13 @@ function Wheel() {
     var vis;
     var innerCircle;
     var pointerImg;
+    let pointerSpark;
     var spinText;
     var lights;
     var winNFT;
     var winEffect;
     let NFT_BorderEffect;
-    let c = 0;
+    let sparkEffect;
     const startAudio = () => {
         new Audio(wheel).play();
         setTimeout(() => {
@@ -94,25 +95,25 @@ function Wheel() {
             .attr("d", function (d) { return arc(d); })
 
         // arcs
-        // .append("path")
-        // .attr("fill", function (d, i) {
-        //     let gardient = createGradient(i);
-        //     gardient
-        //         .append("stop")
-        //         .attr("class", "start")
-        //         .attr("offset", "0%")
-        //         .attr("stop-color", "#ffffff")
-        //         .attr("stop-opacity", 1);
-        //     gardient
-        //         .append("stop")
-        //         .attr("class", "end")
-        //         .attr("offset", "100%")
-        //         .attr("stop-color", function () {
-        //             return d.data.color;
-        //         })
-        //         .attr("stop-opacity", 1);
-        //     return "url(#svgGradient" + i + ")";
-
+        //     .append("path")
+        //     .attr("fill", function (d, i) {
+        //         let gardient = createGradient(i);
+        //         gardient
+        //             .append("stop")
+        //             .attr("class", "start")
+        //             .attr("offset", "0%")
+        //             .attr("stop-color", "#ffffff")
+        //             .attr("stop-opacity", 1);
+        //         gardient
+        //             .append("stop")
+        //             .attr("class", "end")
+        //             .attr("offset", "100%")
+        //             .attr("stop-color", function () {
+        //                 return d.data.color;
+        //             })
+        //             .attr("stop-opacity", 1);
+        //         return "url(#svgGradient" + i + ")";
+        //     })
 
         // .on("mouseover", function (d) {
         //     d3.select(this.parentNode).transition()
@@ -252,13 +253,13 @@ function Wheel() {
             .attr('r', '100%')
             .attr('fx', '0%')
             .attr('fy', '100%')
-        arcs.append("text")
-            .attr("transform", function (d) {
-                d.innerRadius = 0;
-                d.outerRadius = r;
-                d.angle = (d.startAngle + d.endAngle) / 2;
-                return "rotate(" + (d.angle * 180 / Math.PI) + ")translate(" + (0) + ', ' + (-(d.outerRadius - 15)) + ")";
-            })
+            // arcs.append("text")
+            //     .attr("transform", function (d) {
+            //         d.innerRadius = 0;
+            //         d.outerRadius = r;
+            //         d.angle = (d.startAngle + d.endAngle) / 2;
+            //         return "rotate(" + (d.angle * 180 / Math.PI) + ")translate(" + (0) + ', ' + (-(d.outerRadius - 15)) + ")";
+            //     })
             .attr("d", function (d) {
                 return arc(d);
             });
@@ -282,6 +283,17 @@ function Wheel() {
             .attr("d", function (d) {
                 return arc3(d);
             })
+        arcs.append("text")
+            .attr("transform", function (d) {
+                d.innerRadius = 0;
+                d.outerRadius = r;
+                d.angle = (d.startAngle + d.endAngle) / 2;
+                return "rotate(" + (d.angle * 180 / Math.PI) + ")translate(" + (0) + ', ' + (-(d.outerRadius - 15)) + ")";
+            })
+            .attr("text-anchor", "middle")
+            .text(function (d, i) {
+                return data[i].label;
+            })
             .style({ "font-size": "0.7em", "font-weight": "700", 'fill': 'white' })
         arcs.append("text")
             .attr("transform", function (d) {
@@ -302,6 +314,13 @@ function Wheel() {
             .attr("height", 80)
             .attr("x", 233)
             .attr("y", 0)
+        // pointerSpark = svg.append('svg:image')
+        //     .attr('id', 'sparkingPointer')
+        //     .attr('xlink:href', wonNFT)
+        //     .attr("width", 50)
+        //     .attr("height", 50)
+        //     .attr("x", 0)
+        //     .attr("y", 0)
 
         //lights on the frame
         for (let angle = 0; angle <= 360; angle += 30) {
@@ -331,7 +350,6 @@ function Wheel() {
                 .attr("transform", function (d) {
                     return (angle % 90 === 0) ? "rotate(" + angle + ") translate(-7,-246)" : "rotate(" + angle + ") translate(-6,-241)";
                 })
-
         }
 
         //draw spin circle
@@ -452,24 +470,21 @@ function Wheel() {
                     .attr("height", 250)
                     .attr('xlink:href', Common_NFT_Border[0])
                 let idx = 0;
-                let shining;
+                let winningAnimation;
                 setTimeout(() => {
-                    shining = setInterval(() => {
+                    winningAnimation = setInterval(() => {
                         idx += 1;
                         if (idx < CommonGlitter.length)
                             winEffect.attr('xlink:href', CommonGlitter[idx])
                         if (idx < Common_NFT_Border.length)
                             NFT_BorderEffect.attr('xlink:href', Common_NFT_Border[idx])
-                        // console.log('idx...', idx)
                     }, 10);
-
                 }, 1000);
                 setTimeout(() => {
-                    clearInterval(shining);
+                    clearInterval(winningAnimation);
                 }, 5000);
 
-                /* Comment the below line for restrict spin to sngle time */
-                // innerCircle.on("click", spin);
+                /* Comment the below line for restrict spin to single time */
                 spinText.on("click", spin);
             });
         function tween(d, i, a) {
@@ -481,7 +496,7 @@ function Wheel() {
             pointerImg
                 .transition()
                 .duration(2000)
-                .attrTween("transform", tween);
+            // .attrTween("transform", tween);
 
 
         }
