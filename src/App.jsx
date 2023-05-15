@@ -1,15 +1,15 @@
-import { useState } from 'react'
-import './App.css'
-import Wheel from './wheel'
+import { useState } from "react";
+import "./App.css";
+import Wheel from "./wheel";
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
     <>
-      <Wheel />
+      <div className="backgroundImage">
+        <Wheel />
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

@@ -1,10 +1,21 @@
 #root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  /* padding: 2rem; */
   text-align: center;
 }
+.backgroundImage {
+  background-image: url("./assets/bg.png");
+  height:100vh;
+  width: 150vh;
+  margin: 0;
+  padding: 0;
+  margin-top:-70px;
+  
+  background-size: cover;
+  background-repeat: no-repeat;
 
+ }
 .logo {
   height: 6em;
   padding: 1.5em;

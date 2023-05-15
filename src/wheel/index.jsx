@@ -1,8 +1,12 @@
 /* global d3 */
 import { useEffect, useRef } from "react";
-import { data } from "../Constants";
+import { data } from "../Shared/Constants";
+import { CommonGlitter, Common_NFT_Border } from "../Shared/Images";
+import wonNFT from "../assets/NFTs/SMB Epic 466.png";
 import applause from "../assets/applause.mp3";
 import centrePanel from "../assets/centrePanel.png";
+import diamond from "../assets/diamond.png";
+import diamondGlow from "../assets/diamondGlow.png";
 import frame from "../assets/frame.png";
 import leftLine from "../assets/leftLine.png";
 import pointer from "../assets/pointer.png";
@@ -14,25 +18,33 @@ import wheel from "../assets/wheel.mp3";
 import "./style.css";
 function Wheel() {
   const onMountRef = useRef(true);
-  var padding = { top: 10, right: 50, bottom: 10, left: 50 },
-    w = 520 - padding.left - padding.right,
-    h = 520 - padding.top - padding.bottom,
+  var padding = { top: 30, right: 50, bottom: 10, left: 50 },
+    w = 530 - padding.left - padding.right,
+    h = 530 - padding.top - padding.bottom,
     r = Math.min(w, h) / 2,
     rotation = 0,
     oldrotation = 0,
-    picked = 100000;
-
+    picked = 100000,
+    oldpick = [],
+    color = d3.scale.category20(); //category20c()
+  var container;
   var vis;
+  var innerCircle;
+  var pointerImg;
+  let pointerSpark;
+  var spinText;
+  var lights;
+  var winNFT;
+  var winEffect;
+  let NFT_BorderEffect;
+  let sparkEffect;
   let pinGroup;
-
   const startAudio = () => {
-    console.log("playing sound");
     new Audio(wheel).play();
     setTimeout(() => {
       new Audio(applause).play();
     }, 6000);
   };
-
   useEffect(() => {
     if (!onMountRef.current) return;
     onMountRef.current = false;
@@ -45,12 +57,11 @@ function Wheel() {
     svg
       .append("svg:image")
       .attr("xlink:href", frame)
-      .attr("width", "515")
-      .attr("height", "515")
+      .attr("width", "525")
+      .attr("height", "525")
       .attr("x", 0)
-      .attr("y", 0);
-
-    var container = svg
+      .attr("y", 10);
+    container = svg
       .append("g")
       .attr("class", "chartholder")
       .attr(
@@ -62,13 +73,21 @@ function Wheel() {
     var pie = d3.layout
       .pie()
       .sort(null)
-      .value(function () {
+      .value(function (d) {
         return 1;
       });
     // declare an arc generator function
     var arc = d3.svg.arc().outerRadius(r).innerRadius(0);
     var arcs = vis.selectAll("g.slice").data(pie).enter().append("g").attr("class", "slice");
-    // Create the filter for the inner shadow
+    arcs
+      .append("path")
+      .attr("fill", function (d, i) {
+        return color(i);
+      })
+
+      .attr("d", function (d) {
+        return arc(d);
+      });
 
     arcs
       .append("path")
@@ -81,7 +100,6 @@ function Wheel() {
       });
     arcs
       .append("path")
-      //.attr("fill", "url(#sliceGradient)") // Apply the gradient
       .attr("d", function (d) {
         return arc(d);
       })
@@ -134,7 +152,6 @@ function Wheel() {
 
     var arc2 = d3.svg.arc().outerRadius(r).innerRadius(170);
     var arc3 = d3.svg.arc().outerRadius(170).innerRadius(170);
-
     arcs
       .append("path")
       .attr("d", function (d) {
@@ -156,7 +173,6 @@ function Wheel() {
 
         return "url(#outerGrad)";
       });
-
     arcs
       .append("path")
       .attr("fill", "rgba(0,0,0,1)")
@@ -166,12 +182,10 @@ function Wheel() {
       .attr("stroke", "rgba(0,0,0,0.3)")
       .attr("stroke-width", "0.5")
       .attr("stroke-dasharray", "2 2");
-
+    // .attr('stroke', 'grey')
     arcs
       .append("svg:image")
-      .attr("xlink:href", function () {
-        return leftLine;
-      })
+      .attr("xlink:href", leftLine)
       .attr("width", 8)
       .attr("height", 210)
       .attr("x", -2.5)
@@ -192,9 +206,7 @@ function Wheel() {
       });
     arcs
       .append("svg:image")
-      .attr("xlink:href", function () {
-        return rightLine;
-      })
+      .attr("xlink:href", rightLine)
       .attr("width", 8)
       .attr("height", 210)
       .attr("x", -6)
@@ -216,9 +228,7 @@ function Wheel() {
     // square image
     arcs
       .append("svg:image")
-      .attr("xlink:href", function () {
-        return square;
-      })
+      .attr("xlink:href", square)
       .attr("width", 10)
       .attr("height", 10)
       .attr("x", -5)
@@ -233,7 +243,7 @@ function Wheel() {
           ")translate(" +
           0 +
           ", " +
-          (-d.outerRadius + 35) +
+          (-d.outerRadius + 40) +
           ")"
         );
       });
@@ -249,7 +259,6 @@ function Wheel() {
       .attr("r", "100%")
       .attr("fx", "0%")
       .attr("fy", "100%");
-
     arcs
       .append("text")
       .attr("transform", function (d) {
@@ -294,6 +303,50 @@ function Wheel() {
       .style({ "font-size": "0.7em", "font-weight": "700", fill: "rgba(0,0,0,0.5)" });
 
     //make pointer
+
+    // pointerSpark = svg.append('svg:image')
+    //     .attr('id', 'sparkingPointer')
+    //     .attr('xlink:href', wonNFT)
+    //     .attr("width", 50)
+    //     .attr("height", 50)
+    //     .attr("x", 0)
+    //     .attr("y", 0)
+
+    //lights on the frame
+    for (let angle = 0; angle <= 360; angle += 30) {
+      container
+        .append("svg:image")
+        .attr("xlink:href", diamond)
+        .attr("width", function (d) {
+          return angle % 90 === 0 ? 15 : 10;
+        })
+        .attr("height", function (d) {
+          return angle % 90 === 0 ? 15 : 10;
+        })
+        .attr("x", -7)
+        .attr("y", 0)
+        .attr("transform", function (d) {
+          return angle % 90 === 0
+            ? "rotate(" + angle + ") translate(0,-238)"
+            : "rotate(" + angle + ") translate(0,-235)";
+        });
+      lights = container
+        .append("svg:image")
+        .attr("xlink:href", diamondGlow)
+        .attr("width", function (d) {
+          return angle % 90 === 0 ? 30 : 22;
+        })
+        .attr("height", function (d) {
+          return angle % 90 === 0 ? 30 : 22;
+        })
+        .attr("x", -7)
+        .attr("y", 0)
+        .attr("transform", function (d) {
+          return angle % 90 === 0
+            ? "rotate(" + angle + ") translate(-7,-246)"
+            : "rotate(" + angle + ") translate(-6,-241)";
+        });
+    }
     pinGroup = container
       .append("g")
       .attr("x", 0) // Adjust the x-coordinate to align the bottom of the image with the rotation pivot
@@ -323,13 +376,13 @@ function Wheel() {
       .attr("r", 20) // Set the radius of the rotation pivot (0 to make it invisible)
       .attr("fill", "rgba(0,0,0,0)");
     //draw spin circle
-    container
+    innerCircle = container
       .append("circle")
       .attr("cx", 0)
       .attr("cy", 0)
       .attr("r", 210)
       .style({ fill: "url(#circularGradient)", cursor: "pointer" });
-
+    //spin text
     let circularGrad = container.append("radialGradient").attr("id", "circularGradient");
     circularGrad
       .append("stop")
@@ -342,20 +395,19 @@ function Wheel() {
       .attr("class", "start")
       .attr("offset", "30%")
       .attr("stop-color", "black")
-      .attr("stop-opacity", 0.4);
-
+      .attr("stop-opacity", 0.2);
     circularGrad
       .append("stop")
       .attr("class", "start")
       .attr("offset", "40%")
       .attr("stop-color", "transparent")
-      .attr("stop-opacity", 0.3);
+      .attr("stop-opacity", 0.7);
     circularGrad
       .append("stop")
       .attr("class", "start")
-      .attr("offset", "50%")
+      .attr("offset", "45%")
       .attr("stop-color", "transparent")
-      .attr("stop-opacity", 0.2);
+      .attr("stop-opacity", 1);
 
     container
       .append("svg:image")
@@ -364,19 +416,32 @@ function Wheel() {
       .attr("height", 122)
       .attr("x", -61)
       .attr("y", -61);
-    container
+    spinText = container
       .append("svg:image")
       .attr("xlink:href", spinTxt)
-      .attr("width", 120)
+      .attr("width", 100)
       .attr("height", 60)
-      .attr("x", -60)
+      .attr("x", -50)
       .attr("y", -40)
       .on("click", spin)
       .style({ cursor: "pointer" });
-  });
-  let currnetIndex = 0;
+
+    // winNFT = container.append('svg:image')
+    //     .attr('xlink:href', wonNFT)
+    //     .attr("width", 200)
+    //     .attr("height", 200)
+    //     .attr("x", -100)
+    //     .attr("y", -140)
+    // container.append("text")
+    //     .attr("x", 0)
+    //     .attr("y", 12)
+    //     .attr("text-anchor", "middle")
+    //     .text("SPIN")
+    //     .style({ "font-weight": "bold", "font-size": "30px" });
+  }, []);
 
   //Trigger to spin the wheel
+  var currnetIndex = 0;
   const spin = () => {
     startAudio();
 
@@ -404,10 +469,57 @@ function Wheel() {
       .each("end", function () {
         d3.select(".slice:nth-child(" + (picked + 1) + ") path");
         console.log(data[picked].value);
-        oldrotation = rotation;
+        // oldrotation = rotation;
         isRotating = false;
-        // updateRotationAngle(0);
+
         ++currnetIndex;
+        d3.select(".slice:nth-child(" + (picked + 1) + ") path");
+        oldrotation = rotation;
+        /* Get the result value from object "data" */
+        console.log(data[picked].label);
+        winNFT = container
+          .append("svg:image")
+          .attr("xlink:href", wonNFT)
+          .attr("width", 0)
+          .attr("height", 0)
+          .attr("x", 0)
+          .attr("y", 0)
+          .transition()
+          .duration(1000)
+          .attr("width", 200)
+          .attr("height", 200)
+          .attr("x", -100)
+          .attr("y", -140);
+
+        winEffect = container
+          .append("svg:image")
+          .attr("id", "glitter")
+          .attr("x", -250)
+          .attr("y", -350)
+          .attr("width", 500)
+          .attr("height", 500)
+          .attr("xlink:href", CommonGlitter[0]);
+        NFT_BorderEffect = container
+          .append("svg:image")
+          .attr("id", "NFT_Border")
+          .attr("x", -125)
+          .attr("y", -165)
+          .attr("width", 250)
+          .attr("height", 250)
+          .attr("xlink:href", Common_NFT_Border[0]);
+        let idx = 0;
+        let winningAnimation;
+        setTimeout(() => {
+          winningAnimation = setInterval(() => {
+            idx += 1;
+            if (idx < CommonGlitter.length) winEffect.attr("xlink:href", CommonGlitter[idx]);
+            if (idx < Common_NFT_Border.length)
+              NFT_BorderEffect.attr("xlink:href", Common_NFT_Border[idx]);
+          }, 10);
+        }, 1000);
+        setTimeout(() => {
+          clearInterval(winningAnimation);
+        }, 5000);
       });
   };
 
@@ -462,7 +574,7 @@ function Wheel() {
     }
 
     // maxAngle = toBeMoved ? toBeMoved : maxAngle;
-    console.log("MAx angle", maxAngle);
+    // console.log("MAx angle", maxAngle);
     // Rotate the pin to the maximum angle
     pinGroup
       .transition()
