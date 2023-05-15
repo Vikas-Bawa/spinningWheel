@@ -10,7 +10,6 @@ import rightLine from "../assets/rightLine.png";
 import spinTxt from "../assets/spin.png";
 import square from "../assets/square.png";
 import wheel from "../assets/wheel.mp3";
-// import frame3 from "../assets/spark/Spark_00007.png";
 
 import "./style.css";
 function Wheel() {
@@ -59,18 +58,6 @@ function Wheel() {
         "translate(" + (w / 2 + padding.left - 2) + "," + (h / 2 + padding.top + 12) + ")"
       );
     vis = container.append("g");
-    const createGradient = (select) => {
-      return svg
-        .append("radialGradient")
-        .attr("id", `svgGradient` + select)
-        .attr("x1", "0%")
-        .attr("x2", "0%")
-        .attr("y1", "0%")
-        .attr("cx", "35%") //Move the x-center location towards the left
-        .attr("cy", "0%") //Move the y-center location towards the top
-        .attr("r", "60%")
-        .attr("y2", "0%");
-    };
 
     var pie = d3.layout
       .pie()
@@ -82,75 +69,68 @@ function Wheel() {
     var arc = d3.svg.arc().outerRadius(r).innerRadius(0);
     var arcs = vis.selectAll("g.slice").data(pie).enter().append("g").attr("class", "slice");
     // Create the filter for the inner shadow
-    var filter = vis
-      .append("svg:defs")
-      .append("svg:filter")
-      .attr("id", "pathShadowFilter")
-      .attr("x", "-50%")
-      .attr("y", "-50%")
-      .attr("width", "200%")
-      .attr("height", "200%");
-
-    filter
-      .append("svg:feGaussianBlur")
-      .attr("in", "SourceAlpha")
-      .attr("stdDeviation", 2) // Adjust the standard deviation as needed for the desired blur effect
-      .attr("result", "blur");
-
-    filter
-      .append("svg:feOffset")
-      .attr("in", "blur")
-      .attr("dx", 1) // Adjust the offset as needed for the desired shadow effect
-      .attr("dy", 1) // Adjust the offset as needed for the desired shadow effect
-      .attr("result", "offsetBlur");
-
-    filter
-      .append("svg:feComposite")
-      .attr("in", "SourceGraphic")
-      .attr("in2", "offsetBlur")
-      .attr("operator", "over");
 
     arcs
       .append("path")
       .attr("fill", function (d, i) {
-        let gardient = createGradient(i);
-        gardient
-          .append("stop")
-          .attr("class", "start")
-          .attr("offset", "0%")
-          .attr("stop-color", "#ffffff")
-          .attr("stop-opacity", 1);
-        gardient
-          .append("stop")
-          .attr("class", "end")
-          .attr("offset", "100%")
-          .attr("stop-color", function () {
-            return d.data.color;
-          })
-          .attr("stop-opacity", 1);
-        // return "url(#svgGradient" + i + ")";
         return d.data.color;
       })
-      .style("filter", "url(#pathShadowFilter)")
+
       .attr("d", function (d) {
         return arc(d);
       });
+    arcs
+      .append("path")
+      //.attr("fill", "url(#sliceGradient)") // Apply the gradient
+      .attr("d", function (d) {
+        return arc(d);
+      })
+      .style("filter", function (d, i) {
+        // Create a filter for the slice edges
+        // Create a filter for the inner shadow effect
+        var filter = svg
+          .append("filter")
+          .attr("id", "inner-shadow-" + i)
+          .attr("x", "-50%")
+          .attr("y", "-50%")
+          .attr("width", "200%")
+          .attr("height", "200%");
 
-    // const innerShadowPath = arcs
-    //   .append("path")
-    //   .attr("d", function (d) {
-    //     return arc(d);
-    //   })
-    //   .attr("fill", function (d, i) {
-    //     console.log("D for shadow", d);
-    //     let color = d.data.shadow ? d.data.shadow : "#54E0EB";
-    //     console.log("Color", color);
-    //     return color;
-    //   });
-    // innerShadowPath.attr("transform", "translate(4, 4)");
+        // Create a feGaussianBlur element for the blur effect
+        filter.append("feGaussianBlur").attr("in", "SourceAlpha").attr("stdDeviation", "15");
 
-    // Adjust the opacity of the inner shadow
-    // innerShadowPath.style("opacity", 0.5);
+        // Create a feOffset element to offset the shadow
+        filter.append("feOffset").attr("dx", "0").attr("dy", "0").attr("result", "offsetBlur");
+
+        // Create a feComposite element to combine the blurred and original shapes
+        var composite = filter
+          .append("feComposite")
+          .attr("operator", "out")
+          .attr("in", "SourceGraphic")
+          .attr("in2", "offsetBlur")
+          .attr("result", "inverse");
+
+        // Create a feFlood element to apply the color
+        filter
+          .append("feFlood")
+          .attr("flood-color", function () {
+            console.log("d", d);
+            return d.data.shadow;
+          })
+          .attr("flood-opacity", "1")
+          .attr("result", "color");
+
+        // Create a feComposite element to combine the color and original shapes
+        filter
+          .append("feComposite")
+          .attr("operator", "in")
+          .attr("in", "color")
+          .attr("in2", "inverse")
+          .attr("result", "shadow");
+
+        // Apply the filter to the path element
+        return "url(#inner-shadow-" + i + ")";
+      });
 
     var arc2 = d3.svg.arc().outerRadius(r).innerRadius(170);
     var arc3 = d3.svg.arc().outerRadius(170).innerRadius(170);

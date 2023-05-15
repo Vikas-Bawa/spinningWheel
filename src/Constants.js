@@ -14,29 +14,25 @@ import commonWedge4 from "./assets/wedges/fortune4.png";
 // import commonWedge9 from "./assets/wedges/fortune9.png";
 
 export const data = [
-  { label: "LAPTOP", value: 1, color: "#00b1f7", shadow: "#00146c", image: commonWedge1 }, // padding
-  { label: "IMAC", value: 2, color: "#CEE310", image: commonWedge2 },
-  { label: "HONDA", value: 3, color: "#55E1EC", image: commonWedge4 }, ////font-family
-  { label: "SUZUKI", value: 4, color: "#D95BE3", image: commonWedge3 }, //color
-  { label: "LAPTOP", value: 1, color: "#00b1f7", shadow: "#00146c", image: commonWedge1 }, // padding
-  { label: "IMAC", value: 2, color: "#CEE310", image: commonWedge2 },
-  { label: "HONDA", value: 3, color: "#55E1EC", image: commonWedge4 }, ////font-family
-  { label: "SUZUKI", value: 4, color: "#D95BE3", image: commonWedge3 }, //color
+  { label: "LAPTOP", value: 1, color: "#ffffff", shadow: "#73818a", image: commonWedge1 }, // padding
+  { label: "IMAC", value: 2, color: "#6ff903", shadow: "#0d3e02", image: commonWedge2 },
+  { label: "HONDA", value: 3, color: "#00b1f7", shadow: "#001748", image: commonWedge4 }, ////font-family
+  { label: "SUZUKI", value: 4, color: "#c11afb", shadow: "#3b075b", image: commonWedge3 }, //color
+  { label: "LAPTOP", value: 5, color: "#f77b00", shadow: "#aa3900", image: commonWedge1 }, // padding
+  { label: "IMAC", value: 6, color: "#fde901", shadow: "e96b00", image: commonWedge2 },
 
-  { label: "LAPTOP", value: 1, color: "#00b1f7", shadow: "#00146c", image: commonWedge1 }, // padding
-  { label: "IMAC", value: 2, color: "#CEE310", image: commonWedge2 },
-  { label: "HONDA", value: 3, color: "#55E1EC", image: commonWedge4 }, ////font-family
-  { label: "SUZUKI", value: 4, color: "#D95BE3", image: commonWedge3 }, //color
-
-  { label: "LAPTOP", value: 1, color: "#00b1f7", shadow: "#00146c", image: commonWedge1 }, // padding
-  { label: "IMAC", value: 2, color: "#CEE310", image: commonWedge2 },
-  { label: "HONDA", value: 3, color: "#55E1EC", image: commonWedge4 }, ////font-family
-  { label: "SUZUKI", value: 4, color: "#D95BE3", image: commonWedge3 }, //color
-
-  { label: "LAPTOP", value: 1, color: "#00b1f7", shadow: "#00146c", image: commonWedge1 }, // padding
-  { label: "IMAC", value: 2, color: "#CEE310", image: commonWedge2 },
-  { label: "HONDA", value: 3, color: "#55E1EC", image: commonWedge4 }, ////font-family
-  { label: "SUZUKI", value: 4, color: "#D95BE3", image: commonWedge3 }, //color
+  { label: "LAPTOP", value: 1, color: "#ffffff", shadow: "#73818a", image: commonWedge1 }, // padding
+  { label: "IMAC", value: 2, color: "#6ff903", shadow: "#0d3e02", image: commonWedge2 },
+  { label: "HONDA", value: 3, color: "#00b1f7", shadow: "#001748", image: commonWedge4 }, ////font-family
+  { label: "SUZUKI", value: 4, color: "#c11afb", shadow: "#3b075b", image: commonWedge3 }, //color
+  { label: "LAPTOP", value: 5, color: "#f77b00", shadow: "#aa3900", image: commonWedge1 }, // padding
+  { label: "IMAC", value: 6, color: "#fde901", shadow: "e96b00", image: commonWedge2 },
+  { label: "LAPTOP", value: 1, color: "#ffffff", shadow: "#73818a", image: commonWedge1 }, // padding
+  { label: "IMAC", value: 2, color: "#6ff903", shadow: "#0d3e02", image: commonWedge2 },
+  { label: "HONDA", value: 3, color: "#00b1f7", shadow: "#001748", image: commonWedge4 }, ////font-family
+  { label: "SUZUKI", value: 4, color: "#c11afb", shadow: "#3b075b", image: commonWedge3 }, //color
+  { label: "LAPTOP", value: 5, color: "#f77b00", shadow: "#aa3900", image: commonWedge1 }, // padding
+  { label: "IMAC", value: 6, color: "#fde901", shadow: "e96b00", image: commonWedge2 },
 
   // { label: "FERRARI", value: 5, color: "#00b1f7", image: commonWedge5 }, //font-size
   // { label: "APARTMENT", value: 6, color: "#00b1f7", image: commonWedge6 }, //background-color
