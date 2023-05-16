@@ -1,7 +1,7 @@
 /* global d3 */
 import { useEffect, useRef } from "react";
 import { data } from "../Shared/Constants";
-import { CommonGlitter, Common_NFT_Border } from "../Shared/Images";
+import { CommonGlitter } from "../Shared/Images";
 import applause from "../assets/applause.mp3";
 import wonNFT from "../assets/NFTs/SMB Epic 466.png";
 import centrePanel from "../assets/centrePanel.png";
@@ -20,7 +20,7 @@ import useImagePreloader from "../utility/utility";
 function Wheel() {
   const onMountRef = useRef(true);
 
-  const preloadSrcList = [...CommonGlitter, ...Common_NFT_Border];
+  const preloadSrcList = [...CommonGlitter];
 
   const { imagesPreloaded } = useImagePreloader(preloadSrcList);
 
@@ -152,29 +152,29 @@ function Wheel() {
         return "url(#inner-shadow-" + i + ")";
       });
 
-    var arc2 = d3.svg.arc().outerRadius(radius).innerRadius(170);
+    // var arc2 = d3.svg.arc().outerRadius(radius).innerRadius(170);
     var arc3 = d3.svg.arc().outerRadius(170).innerRadius(170);
-    arcs
-      .append("path")
-      .attr("d", function (d) {
-        return arc2(d);
-      })
-      .attr("fill", function () {
-        let outerGradient = container
-          .append("radialGradient")
-          .attr("id", "outerGrad")
-          .attr("r", "90%");
-        outerGradient
-          .append("stop")
-          .attr("offset", "0%")
-          .attr("style", "stop-color:rgba(0,0,0,0.4);stop-opacity:1");
-        outerGradient
-          .append("stop")
-          .attr("offset", "100%")
-          .attr("style", "stop-color:transparent;stop-opacity:1");
+    // arcs
+    //   .append("path")
+    //   .attr("d", function (d) {
+    //     return arc2(d);
+    //   })
+    //   .attr("fill", function () {
+    //     let outerGradient = container
+    //       .append("radialGradient")
+    //       .attr("id", "outerGrad")
+    //       .attr("r", "90%");
+    //     outerGradient
+    //       .append("stop")
+    //       .attr("offset", "0%")
+    //       .attr("style", "stop-color:rgba(0,0,0,0.4);stop-opacity:1");
+    //     outerGradient
+    //       .append("stop")
+    //       .attr("offset", "100%")
+    //       .attr("style", "stop-color:transparent;stop-opacity:1");
 
-        return "url(#outerGrad)";
-      });
+    //     return "url(#outerGrad)";
+    //   });
     arcs
       .append("path")
       .attr("fill", "rgba(0,0,0,1)")
@@ -497,27 +497,29 @@ function Wheel() {
         winEffect = container
           .append("svg:image")
           .attr("id", "glitter")
-          .attr("x", -250)
-          .attr("y", -350)
-          .attr("width", 500)
-          .attr("height", 500)
+          .attr("x", -380)
+          .attr("y", -415)
+          .attr("width", 760)
+          .attr("height", 750)
+          .attr("opacity", 0)
           .attr("xlink:href", CommonGlitter[0]);
-        NFT_BorderEffect = container
-          .append("svg:image")
-          .attr("id", "NFT_Border")
-          .attr("x", -125)
-          .attr("y", -165)
-          .attr("width", 250)
-          .attr("height", 250)
-          .attr("xlink:href", Common_NFT_Border[0]);
+        // NFT_BorderEffect = container
+        //   .append("svg:image")
+        //   .attr("id", "NFT_Border")
+        //   .attr("x", -125)
+        //   .attr("y", -165)
+        //   .attr("width", 250)
+        //   .attr("height", 250)
+        //   .attr("xlink:href", Common_NFT_Border[0]);
         let idx = 0;
         let winningAnimation;
         setTimeout(() => {
           winningAnimation = setInterval(() => {
             idx += 1;
-            if (idx < CommonGlitter.length) winEffect.attr("xlink:href", CommonGlitter[idx]);
-            if (idx < Common_NFT_Border.length)
-              NFT_BorderEffect.attr("xlink:href", Common_NFT_Border[idx]);
+            if (idx < CommonGlitter.length)
+              winEffect.attr("xlink:href", CommonGlitter[idx]).attr("opacity", 1);
+            // if (idx < Common_NFT_Border.length)
+            // NFT_BorderEffect.attr("xlink:href", Common_NFT_Border[idx]);
           }, 20);
         }, 1000);
         setTimeout(() => {
