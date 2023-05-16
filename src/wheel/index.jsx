@@ -1,5 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* global d3 */
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { data } from "../Shared/Constants";
 import { CommonGlitter } from "../Shared/Images";
 import applause from "../assets/applause.mp3";
@@ -16,17 +17,10 @@ import square from "../assets/square.png";
 import wheel from "../assets/wheel.mp3";
 
 import "./style.css";
-import useImagePreloader from "../utility/utility";
+
 function Wheel() {
   const onMountRef = useRef(true);
-
-  const preloadSrcList = [...CommonGlitter];
-
-  const { imagesPreloaded } = useImagePreloader(preloadSrcList);
-
-  if (!imagesPreloaded) {
-    console.log("Loading in progress");
-  }
+  const [chartIdName, setChartIdName] = useState("chart");
 
   var padding = { top: 30, right: 50, bottom: 10, left: 50 },
     widht = 530 - padding.left - padding.right,
@@ -44,20 +38,26 @@ function Wheel() {
   var spinButton;
 
   let pinGroup;
+
+  /**
+   * To Start Wheel sound
+   */
   const startAudio = () => {
     new Audio(wheel).play();
     setTimeout(() => {
       new Audio(applause).play();
     }, 6000);
   };
+
   useEffect(() => {
     if (!onMountRef.current) return;
     onMountRef.current = false;
+
     var svg = d3
       .select("#chart")
       .append("svg")
       .data([data])
-      .attr("width", widht + padding.left + padding.right)
+      .attr("width", widht + padding.left + padding.right) //chart with the size of widht and padding
       .attr("height", height + padding.top + padding.bottom);
     svg
       .append("svg:image")
@@ -75,25 +75,30 @@ function Wheel() {
       );
     vis = container.append("g");
 
+    //To genrate a pie in layout
     var pie = d3.layout
       .pie()
       .sort(null)
-      .value(function (d) {
+      .value(function () {
         return 1;
       });
+
     // declare an arc generator function
     var arc = d3.svg.arc().outerRadius(radius).innerRadius(0);
     var arcs = vis.selectAll("g.slice").data(pie).enter().append("g").attr("class", "slice");
 
+    //Path slice with the same color
     arcs
       .append("path")
-      .attr("fill", function (d, i) {
+      .attr("fill", function (d) {
         return d.data.color;
       })
 
       .attr("d", function (d) {
         return arc(d);
       });
+
+    //To add filter Effect in slice for inner glow
     arcs
       .append("path")
       .attr("d", function (d) {
@@ -121,7 +126,7 @@ function Wheel() {
           .attr("fill", "none");
 
         // Create a feComposite element to combine the blurred and original shapes
-        var composite = filter
+        filter
           .append("feComposite")
           .attr("operator", "out")
           .attr("in", "SourceGraphic")
@@ -149,8 +154,11 @@ function Wheel() {
         return "url(#inner-shadow-" + i + ")";
       });
 
-    var arc2 = d3.svg.arc().outerRadius(radius).innerRadius(170);
+    //arc for overlay layers
+    // var arc2 = d3.svg.arc().outerRadius(radius).innerRadius(170);
     var arc3 = d3.svg.arc().outerRadius(170).innerRadius(170);
+
+    //Overlay layer of text and all
     // arcs
     //   .append("path")
     //   .attr("d", function (d) {
@@ -172,6 +180,8 @@ function Wheel() {
 
     //     return "url(#outerGrad)";
     //   });
+
+    //Dashed line according to the arc
     arcs
       .append("path")
       .attr("fill", "rgba(0,0,0,1)")
@@ -181,7 +191,10 @@ function Wheel() {
       .attr("stroke", "rgba(0,0,0,0.3)")
       .attr("stroke-width", "0.5")
       .attr("stroke-dasharray", "2 2");
-    // .attr('stroke', 'grey')
+
+    /**
+     * Each slice consist of two lines left and right for arrow
+     */
     arcs
       .append("svg:image")
       .attr("xlink:href", leftLine)
@@ -203,6 +216,8 @@ function Wheel() {
           ")"
         );
       });
+
+    //It is for right side
     arcs
       .append("svg:image")
       .attr("xlink:href", rightLine)
@@ -224,7 +239,8 @@ function Wheel() {
           ")"
         );
       });
-    // square image
+
+    // square image in the center of arc line
     arcs
       .append("svg:image")
       .attr("xlink:href", square)
@@ -247,17 +263,7 @@ function Wheel() {
         );
       });
 
-    arcs
-      .append("defs")
-      .append("radialGradient")
-      .attr("id", function (d, i) {
-        return "grad" + (i + 1);
-      })
-      .attr("cx", "0%")
-      .attr("cy", "0%")
-      .attr("r", "100%")
-      .attr("fx", "0%")
-      .attr("fy", "100%");
+    //Text title for each slice
     arcs
       .append("text")
       .attr("transform", function (d) {
@@ -279,6 +285,8 @@ function Wheel() {
         return data[i].label;
       })
       .style({ "font-size": "0.7em", "font-weight": "700", fill: "white" });
+
+    //value or number for each arc
     arcs
       .append("text")
       .attr("transform", function (d) {
@@ -300,16 +308,6 @@ function Wheel() {
         return data[i].value;
       })
       .style({ "font-size": "0.7em", "font-weight": "700", fill: "rgba(0,0,0,0.5)" });
-
-    //make pointer
-
-    // pointerSpark = svg.append('svg:image')
-    //     .attr('id', 'sparkingPointer')
-    //     .attr('xlink:href', wonNFT)
-    //     .attr("width", 50)
-    //     .attr("height", 50)
-    //     .attr("x", 0)
-    //     .attr("y", 0)
 
     //lights on the frame
     for (let angle = 0; angle <= 360; angle += 30) {
@@ -346,6 +344,8 @@ function Wheel() {
             : "rotate(" + angle + ") translate(-6,-241)";
         });
     }
+
+    //Pingroup container for making rotation
     pinGroup = container
       .append("g")
       .attr("x", 0) // Adjust the x-coordinate to align the bottom of the image with the rotation pivot
@@ -415,6 +415,7 @@ function Wheel() {
       .attr("height", 122)
       .attr("x", -61)
       .attr("y", -61);
+    //Spin button
     spinButton = container
       .append("svg:image")
       .attr("xlink:href", spinTxt)
@@ -422,16 +423,18 @@ function Wheel() {
       .attr("height", 60)
       .attr("x", -50)
       .attr("y", -40)
-      .on("click", spin)
+      .on("click", handleWheelSpin)
       .style({ cursor: "pointer" });
-  }, [container, spinButton]);
+  }, []);
 
-  //Trigger to spin the wheel
-  var currnetIndex = 0;
-  const spin = () => {
-    document.getElementById("chart").classList.add("chart2");
+  /**
+   * Funtion to handle wheel spin
+   */
+  const handleWheelSpin = () => {
+    setChartIdName("chartClicked");
     startAudio();
     spinButton.on("click", null);
+    var currnetIndex = 0;
     var ps = 360 / data.length;
 
     var slectedIndex = (data.length - currnetIndex) * ps;
@@ -447,18 +450,16 @@ function Wheel() {
     console.log("Rotation ", rotation);
     console.log("oldRotation ", oldrotation);
 
-    // rotatePin();
     vis
       .transition()
       .duration(6000)
       // .ease("bouncein")
-      .attrTween("transform", rotTween)
+      .attrTween("transform", rotateTween)
       .each("end", function () {
         d3.select(".slice:nth-child(" + (picked + 1) + ") path");
         console.log(data[picked].value);
-        // oldrotation = rotation;
-        isRotating = false;
 
+        isRotating = false;
         ++currnetIndex;
         d3.select(".slice:nth-child(" + (picked + 1) + ") path");
         oldrotation = rotation;
@@ -476,13 +477,13 @@ function Wheel() {
           .attr("width", 200)
           .attr("height", 200)
           .attr("x", -100)
-          .attr("y", -140);
+          .attr("y", -250);
 
         winEffect = container
           .append("svg:image")
           .attr("id", "glitter")
           .attr("x", -380)
-          .attr("y", -415)
+          .attr("y", -525)
           .attr("width", 760)
           .attr("height", 750)
           .attr("opacity", 0)
@@ -503,12 +504,21 @@ function Wheel() {
       });
   };
 
+  /**
+   * Calculates wheel rotation progress according to current angel and target angle
+   * @param {*} part
+   * @param {*} total
+   * @returns
+   */
   function calculatePercentage(part, total) {
     return (part / total) * 100;
   }
 
-  // currentRotation = 0;
-  function rotTween() {
+  /**
+   * It handles the updation angle and wheel and updates the pin the pogress of roattion
+   * @returns
+   */
+  function rotateTween() {
     var i = d3.interpolate(oldrotation % 360, rotation);
     rotatePin(0);
     return function (t) {
@@ -522,6 +532,11 @@ function Wheel() {
   var maxAngle = 0; // Maximum angle to rotate
   var isRotating = true; // Flag to indicate if rotation should continue
 
+  /**
+   * Rotate pin accordingly to the progess of wheel spin
+   * @param {*} progess
+   * @returns
+   */
   function rotatePin(progess) {
     var duration = 100; // Duration of the transition in milliseconds
     var easing = "linear"; // Easing function for the transition
@@ -554,9 +569,6 @@ function Wheel() {
       maxAngle = toBeMoved;
     }
 
-    // maxAngle = toBeMoved ? toBeMoved : maxAngle;
-    // console.log("MAx angle", maxAngle);
-    // Rotate the pin to the maximum angle
     pinGroup
       .transition()
       .duration(duration)
@@ -580,7 +592,7 @@ function Wheel() {
   }
   return (
     <>
-      <div id="chart"></div>
+      <div id={chartIdName}></div>
     </>
   );
 }
