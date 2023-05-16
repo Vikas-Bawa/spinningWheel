@@ -16,8 +16,18 @@ import square from "../assets/square.png";
 import wheel from "../assets/wheel.mp3";
 
 import "./style.css";
+import useImagePreloader from "../utility/utility";
 function Wheel() {
   const onMountRef = useRef(true);
+
+  const preloadSrcList = [...CommonGlitter, ...Common_NFT_Border];
+
+  const { imagesPreloaded } = useImagePreloader(preloadSrcList);
+
+  if (!imagesPreloaded) {
+    console.log("Loading in progress");
+  }
+
   var padding = { top: 30, right: 50, bottom: 10, left: 50 },
     widht = 530 - padding.left - padding.right,
     h = 530 - padding.top - padding.bottom,
@@ -32,7 +42,7 @@ function Wheel() {
   var winEffect;
   var winNFT;
   var winEffect;
-
+  var spinButton;
   let sparkEffect;
   let NFT_BorderEffect;
 
@@ -93,8 +103,6 @@ function Wheel() {
         return arc(d);
       })
       .style("filter", function (d, i) {
-        // Create a filter for the slice edges
-        // Create a filter for the inner shadow effect
         var filter = svg
           .append("filter")
           .attr("id", "inner-shadow-" + i)
@@ -104,10 +112,16 @@ function Wheel() {
           .attr("height", "200%");
 
         // Create a feGaussianBlur element for the blur effect
-        filter.append("feGaussianBlur").attr("in", "SourceAlpha").attr("stdDeviation", "15");
+        filter.append("feGaussianBlur").attr("in", "SourceAlpha").attr("stdDeviation", "20");
 
         // Create a feOffset element to offset the shadow
-        filter.append("feOffset").attr("dx", "0").attr("dy", "0").attr("result", "offsetBlur");
+        filter
+          .append("rect")
+          .attr("x", "-60%")
+          .attr("y", "-20%")
+          .attr("width", "180%")
+          .attr("height", "180%")
+          .attr("fill", "none");
 
         // Create a feComposite element to combine the blurred and original shapes
         var composite = filter
@@ -121,8 +135,7 @@ function Wheel() {
         filter
           .append("feFlood")
           .attr("flood-color", function () {
-            console.log("d", d);
-            return d.data.shadow;
+            return d.data;
           })
           .attr("flood-opacity", "1")
           .attr("result", "color");
@@ -405,7 +418,7 @@ function Wheel() {
       .attr("height", 122)
       .attr("x", -61)
       .attr("y", -61);
-    container
+    spinButton = container
       .append("svg:image")
       .attr("xlink:href", spinTxt)
       .attr("width", 100)
@@ -432,8 +445,9 @@ function Wheel() {
   //Trigger to spin the wheel
   var currnetIndex = 0;
   const spin = () => {
+    document.getElementById("chart").classList.add("chart2");
     startAudio();
-
+    spinButton.on("click", null);
     var ps = 360 / data.length;
 
     var slectedIndex = (data.length - currnetIndex) * ps;
@@ -504,7 +518,7 @@ function Wheel() {
             if (idx < CommonGlitter.length) winEffect.attr("xlink:href", CommonGlitter[idx]);
             if (idx < Common_NFT_Border.length)
               NFT_BorderEffect.attr("xlink:href", Common_NFT_Border[idx]);
-          }, 10);
+          }, 20);
         }, 1000);
         setTimeout(() => {
           clearInterval(winningAnimation);
@@ -523,7 +537,7 @@ function Wheel() {
     return function (t) {
       var currentRotation = i(t);
       rotatePin(currentRotation);
-      return "rotate(" + -currentRotation + ")";
+      return "rotate(" + currentRotation + ")";
     };
   }
 
@@ -570,7 +584,7 @@ function Wheel() {
       .transition()
       .duration(duration)
       .ease(easing)
-      .attr("transform", "translate(-0, -240) rotate(" + maxAngle + ")")
+      .attr("transform", "translate(-0, -240) rotate(" + -maxAngle + ")")
       .each("end", function () {
         pinGroup
           .transition()

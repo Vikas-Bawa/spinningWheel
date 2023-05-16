@@ -1,0 +1,30 @@
+text {
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    pointer-events: none;
+}
+
+#chart {
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: 0;
+    margin: auto;
+    /* width: 50%; */
+    scale: 1.5;
+    left: 20%;
+    top: 20%;
+}
+
+
+/* .slice:hover path {
+    fill: rgba(0, 0, 0, 0.5);
+opacity: 0.6;
+transform: scale(1.1);
+transition: all ease 0.5s;
+}
+
+*/
+/* .slice:hover text {
+    transform: translate(0, 200);
+} */

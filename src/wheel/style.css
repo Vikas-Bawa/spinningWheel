@@ -15,6 +15,18 @@ text {
     left: 20%;
     top: 20%;
 }
+.chart2 {
+    transition: cubic-bezier(0.075, 0.82, 0.165, 1);
+    position: absolute;
+    width: 500px;
+    height: 500px;
+    top: 0;
+    margin: auto;
+    /* width: 50%; */
+    scale: 1.5;
+    left: 20%;
+    top: 50%;
+}
 
 
 /* .slice:hover path {
