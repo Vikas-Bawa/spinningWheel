@@ -30,8 +30,8 @@ function Wheel() {
 
   var padding = { top: 30, right: 50, bottom: 10, left: 50 },
     widht = 530 - padding.left - padding.right,
-    h = 530 - padding.top - padding.bottom,
-    radius = Math.min(widht, h) / 2,
+    height = 530 - padding.top - padding.bottom,
+    radius = Math.min(widht, height) / 2,
     rotation = 0,
     oldrotation = 0,
     picked = 100000;
@@ -40,11 +40,8 @@ function Wheel() {
   var vis;
 
   var winEffect;
-  var winNFT;
-  var winEffect;
+
   var spinButton;
-  let sparkEffect;
-  let NFT_BorderEffect;
 
   let pinGroup;
   const startAudio = () => {
@@ -61,7 +58,7 @@ function Wheel() {
       .append("svg")
       .data([data])
       .attr("width", widht + padding.left + padding.right)
-      .attr("height", h + padding.top + padding.bottom);
+      .attr("height", height + padding.top + padding.bottom);
     svg
       .append("svg:image")
       .attr("xlink:href", frame)
@@ -74,7 +71,7 @@ function Wheel() {
       .attr("class", "chartholder")
       .attr(
         "transform",
-        "translate(" + (widht / 2 + padding.left - 2) + "," + (h / 2 + padding.top + 12) + ")"
+        "translate(" + (widht / 2 + padding.left - 2) + "," + (height / 2 + padding.top + 12) + ")"
       );
     vis = container.append("g");
 
@@ -152,7 +149,7 @@ function Wheel() {
         return "url(#inner-shadow-" + i + ")";
       });
 
-    // var arc2 = d3.svg.arc().outerRadius(radius).innerRadius(170);
+    var arc2 = d3.svg.arc().outerRadius(radius).innerRadius(170);
     var arc3 = d3.svg.arc().outerRadius(170).innerRadius(170);
     // arcs
     //   .append("path")
@@ -427,20 +424,7 @@ function Wheel() {
       .attr("y", -40)
       .on("click", spin)
       .style({ cursor: "pointer" });
-
-    // winNFT = container.append('svg:image')
-    //     .attr('xlink:href', wonNFT)
-    //     .attr("width", 200)
-    //     .attr("height", 200)
-    //     .attr("x", -100)
-    //     .attr("y", -140)
-    // container.append("text")
-    //     .attr("x", 0)
-    //     .attr("y", 12)
-    //     .attr("text-anchor", "middle")
-    //     .text("SPIN")
-    //     .style({ "font-weight": "bold", "font-size": "30px" });
-  }, []);
+  }, [container, spinButton]);
 
   //Trigger to spin the wheel
   var currnetIndex = 0;
@@ -480,7 +464,7 @@ function Wheel() {
         oldrotation = rotation;
         /* Get the result value from object "data" */
         console.log(data[picked].label);
-        winNFT = container
+        container
           .append("svg:image")
           .attr("xlink:href", wonNFT)
           .attr("width", 0)
@@ -503,14 +487,7 @@ function Wheel() {
           .attr("height", 750)
           .attr("opacity", 0)
           .attr("xlink:href", CommonGlitter[0]);
-        // NFT_BorderEffect = container
-        //   .append("svg:image")
-        //   .attr("id", "NFT_Border")
-        //   .attr("x", -125)
-        //   .attr("y", -165)
-        //   .attr("width", 250)
-        //   .attr("height", 250)
-        //   .attr("xlink:href", Common_NFT_Border[0]);
+
         let idx = 0;
         let winningAnimation;
         setTimeout(() => {
@@ -518,8 +495,6 @@ function Wheel() {
             idx += 1;
             if (idx < CommonGlitter.length)
               winEffect.attr("xlink:href", CommonGlitter[idx]).attr("opacity", 1);
-            // if (idx < Common_NFT_Border.length)
-            // NFT_BorderEffect.attr("xlink:href", Common_NFT_Border[idx]);
           }, 20);
         }, 1000);
         setTimeout(() => {
